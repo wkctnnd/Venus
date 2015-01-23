@@ -1,2 +1,8 @@
-void* Venus_new();
-void Venus_delete();
+namespace Vense
+{
+	namespace Memory
+	{
+		void* Venus_new(int size);
+		void Venus_delete(void *pointer);
+	}
+}
