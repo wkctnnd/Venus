@@ -1,6 +1,4 @@
 #include"../type.h"
-#include<stdlib.h>
-#include<Assert.h>
 #define ALIGN16 16
 #define ALIGN8 8
 #define ALIGN4 4
@@ -12,13 +10,9 @@ namespace Venus
 		class Allocator
 		{
 		public:
-			void *allocate(unsigned int size);
-			void dellocate();
+			void *allocate(uint32 size, uint8 alignment);
+			void dellocate(void* p, uint32 size, uint8 alignment);
 
-			void *alligned()
-			{
-				
-			}
 		};
 
 		
@@ -33,59 +27,21 @@ namespace Venus
 			};
 
 			void *mFreeList;
-			
+		
 		public:
-			DynamicPoolAllocator(uint32 size = 8)
-			{
-				if(size > 8)
-					mFreeList = (void*) malloc (sizeof(size));
-				freeblock *free = (freeblock *) (mFreeList);
-				free->mNext = NULL;
-				free->msize = size;
-			}
-			void* allocate(uint32 size , uint32 allignment = ALIGN4)
-			{
-				uint32 expandsize = size + allignment;
+			DynamicPoolAllocator(uint32 size = 8);
 
-				void * allocateblock = NULL;
-				freeblock* p = (freeblock*)mFreeList;
-				freeblock* q = NULL;
-				while (p)
-				{
-					if(p->msize > expandsize)
-					{
-						if(q == NULL)
-							mFreeList = p->mNext;
-						else
-							q ->mNext = p -> mNext;
+			void* allocate(uint32 size , uint8 allignment);
 
-						if(p->msize - expandsize >= 8)
-						{
+			void defragment();
 
-							break;
-						}
-
-						else
-						{
-
-							break;
-						}
-					}
-
-					p = p->mNext;
-					q = p;
-				}
-
-				assert(allocateblock != NULL);
-				size_t misalign = (size_t)allocateblock;
-				size_t mask = (size_t)allignment - 1;
-				uint32 adjust = misalign & mask;
-				allocateblock = (void* )(misalign + adjust);
-
-				return allocateblock;
-			}
+			void dellocate(void* pointer, uint32 size, uint8 alignment);
 
 		};
+
+
+
+
 
 		//block size is byte unit
 		template <int blocksize>
@@ -99,8 +55,8 @@ namespace Venus
 
 
 
-		void* Venus_new( int size, Allocator *allocator = 0);
-		void Venus_delete(void *pointer);
+		void* Venus_new( uint32 size, Allocator *allocator = 0, uint8 alignment = ALIGN4);
+		void Venus_delete(void *pointer, uint32 size, Allocator *allocator = 0, uint8 alignment = ALIGN4);
 		
 	}
 }
