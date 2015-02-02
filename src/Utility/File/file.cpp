@@ -16,7 +16,7 @@ namespace Venus
 #if (defined VENUS_WIN32) || (defined VENUS_WIN32)
 			implementation = new WinFileImp();
 #elif defined VENUS_MAC
-			
+			implementation = new MacFileImp();
 #endif
 			
 		}
@@ -24,7 +24,6 @@ namespace Venus
 		bool VFile::open()
 		{
 			implementation->open();
-
 		}
 
 		void VFile::close()
