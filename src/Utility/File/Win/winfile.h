@@ -7,10 +7,10 @@ namespace Venus
 		{
 		public:
 
-			bool open();
+			bool open(std::string file, FileAcess acess);
 			void close();
 			void synRead();
 			void asynRead();
+			void spliteFilePath(std::string&, std::string&, std::string&);
 		}
-	}
 }
