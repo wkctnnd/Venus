@@ -1,4 +1,5 @@
 #include "File/file.h"
+#include <windows.h>
 namespace Venus
 {
 	namespace File
@@ -11,6 +12,8 @@ namespace Venus
 			void close();
 			void synRead();
 			void asynRead();
-			void spliteFilePath(std::string&, std::string&, std::string&);
+			
+		private:
+			HANDLE mFile;
 		}
 }
