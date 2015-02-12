@@ -1,0 +1,10 @@
+cmake_minimum_required(VERSION 2.8)
+#INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/include/Graphics)
+#Set(ENV{DXSDK_DIR})
+include_directories($ENV{DXSDK_DIR})
+
+FILE(GLOB_RECURSE SOURCE_1 *.cpp)
+FILE(GLOB_RECURSE SOURCE_2 *.h)
+
+
+ADD_LIBRARY(DX11 STATIC ${SOURCE_1} ${SOURCE_2})

@@ -3,29 +3,49 @@ namespace Venus
 {
 	namespace File
 	{
+
+		enum FileAcess
+		{
+			READ,
+			WRITE,
+			TRUCATE,
+			CREATE,
+		};
+
 		class FileImp;
 
 		class VFile
 		{
 		public:
 			VFile();
-			bool open();
+			bool open(std::string file, FileAcess acess);
+
 			void close();
 
 			void synRead();
-			void asynRead();
+			void synWrite();
+
+			void asynRead();			
+			void asynWrite();
+
 		private:
-			std::string mDefaultpath;
+			void spliteFilePath(std::string, std::string&, std::string&, std::string&);
 			FileImp* implementation;
+			std::string mDefaultpath;
 		};
 
 		class FileImp
 		{
 		public:
-			virtual bool open() = 0;
+			virtual bool open(std::string file, FileAcess acess) = 0;
 			virtual void close() = 0;
-			virtual void synRead() = 0;
-			virtual void asynRead() = 0;
+			void synRead();
+			void synWrite();
+
+			void asynRead();			
+			void asynWrite();
+			
+
 		};
 	}
 }

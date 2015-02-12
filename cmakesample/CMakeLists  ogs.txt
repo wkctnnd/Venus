@@ -1,0 +1,167 @@
+cmake_minimum_required(VERSION 2.8)
+
+set(PLATFORM x86 
+    CACHE
+    STRING
+    "Target platform to build")
+set(CONFIG debug
+    CACHE
+    STRING
+    "Build configuration")
+set(BINDSCC OFF
+    CACHE
+    STRING
+    "Enable source control integration")
+set(SHOWCASE OFF
+    CACHE
+    STRING
+    "define SHOWCASE_OGS")
+set(PROFILER ""
+    CACHE
+    STRING
+    "Enable support for the specified profiler")
+set(GLES OFF
+    CACHE
+    STRING
+    "Enable PC emulation of OpenGL ES")
+
+if (WIN32 AND ${CONFIG} STREQUAL "profile")
+   set(CMAKE_CONFIGURATION_TYPES "Release" CACHE STRING
+     "Reset the configurations to what we need"
+     FORCE)
+	 set(CMAKE_SHARED_LINKER_FLAGS_PROFILE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE}")
+	 set(CMAKE_CXX_FLAGS_PROFILE "${CMAKE_CXX_FLAGS_RELEASE}")
+	 set(CMAKE_EXE_LINKER_FLAGS_PROFILE "${CMAKE_EXE_LINKER_FLAGS_RELEASE}")
+elseif (${CONFIG} STREQUAL "debug")
+	set(CMAKE_CONFIGURATION_TYPES Debug CACHE STRING "Debug only configuration" FORCE)
+else()
+	set(CMAKE_CONFIGURATION_TYPES Release CACHE STRING "Release only configuration" FORCE)
+endif(WIN32 AND ${CONFIG} STREQUAL "profile")
+
+set(CMAKE_BUILD_TYPE "${CONFIG}")    
+project(Ogs_${PLATFORM}_${CONFIG})
+
+message(STATUS "Config is ${CONFIG}")
+message(STATUS "Platform is ${PLATFORM}")
+message(STATUS "Profiler is ${PROFILER}")
+message(STATUS "Source control integration is ${BINDSCC}")
+message(STATUS "define SHOWCASE_OGS is ${SHOWCASE}")
+message(STATUS "GLES is ${GLES}")
+
+get_filename_component(ogs_dir ".." ABSOLUTE)
+set(cmake_inc_dir "${ogs_dir}/Scripts/CMakeFiles")
+
+#include precompiled header support module
+set(CMAKE_MODULE_PATH ${cmake_inc_dir})
+find_package(PCHSupport)
+
+# use the "include" feature to grab a bunch more information
+# that's common to all our cmakelists.  Note that the "find_package"
+# approach used above may also work for this, but seems to be harder to use.
+
+#The including order of the following files should not be changed!
+#The dependency is one after the previous.
+include(${cmake_inc_dir}/SourceGroupMacro.txt)
+include(${cmake_inc_dir}/DefineOGSConfiguration.txt)
+include(${cmake_inc_dir}/AirMaxVersions.txt)
+include(${cmake_inc_dir}/DefineAIRMaxComponents.txt)
+include(${cmake_inc_dir}/DefineExternalComponents.txt)
+
+if (WIN32)
+#Force include banned.h for all OGS projects which will add SDL support.
+    set(cc_flags "/FIAIRViz_banned.h ${cc_flags}")
+endif (WIN32)
+
+if (APPLE)
+    # Add a target depending on other targets. This target will fix the install name of all dylibs.
+    add_custom_target(FixInstallName ALL
+			COMMAND ${ogs_dir}/Scripts/mac/fixInstallName.sh ${toolkit_bin_dir} @executable_path)
+
+    macro(add_library _target)
+        _add_library (${_target} ${ARGN})
+        add_dependencies(FixInstallName ${_target})
+    endmacro()
+
+    macro(add_executable _target)
+        _add_executable (${_target} ${ARGN})
+        add_dependencies(FixInstallName ${_target})
+    endmacro()
+endif (APPLE)
+
+add_subdirectory("kcg" "kcg")
+add_subdirectory("ObjectModel" "ObjectModel")
+add_subdirectory("DeviceManager" "DeviceManager")
+add_subdirectory("DMIntegration/IOIntegration" "DMIntegration/IOIntegration")
+add_subdirectory("SymbolStylization" "SymbolStylization")
+add_subdirectory("ATILIntegration" "ATILIntegration")
+add_subdirectory("VirtualDevices/FileDecrypter" "VirtualDevices/FileDecrypter")
+add_subdirectory("Archive" "Devel/Archive")
+add_subdirectory("Graphics" "Graphics")
+add_subdirectory("LibraryBuilder" "LibraryBuilder")	
+add_subdirectory("Protein/FBXAssetTranslator" "Protein/FBXAssetTranslator")
+add_subdirectory("Protein/ProteinAssetTranslator" "Protein/ProteinAssetTranslator")
+add_subdirectory("Protein/ProteinCommonTranslator" "Protein/ProteinCommonTranslator")
+
+if (WIN32)
+    #add_subdirectory("Profiler" "Profiler")
+    add_subdirectory("CopyExternals" "CopyExternals")
+    add_subdirectory("DebugUtil" "DebugUtil")
+    add_subdirectory("SHFontParser" "SHFontParser")
+    add_subdirectory("FontDevice/FreeType" "FontDevice/FreeType")
+    add_subdirectory("FontDevice/GDI" "FontDevice/GDI")
+    add_subdirectory("FontDevice/SHX" "FontDevice/SHX")
+    add_subdirectory("RapidRT" "RapidRT")
+    add_subdirectory("RapidRT/RapidRTShaders" "RapidRT/RapidRTShaders")
+    add_subdirectory("RapidRT/RapidRTShaderInterface" "RapidRT/RapidRTShaderInterface")
+    add_subdirectory("LangHandler/Win" "LangHandler/Win")
+    add_subdirectory("FragDebug/LIB" "FragDebug/LIB")
+    add_subdirectory("FragDebug/DLL" "FragDebug/DLL")
+    add_subdirectory("FragDebug/EXE" "FragDebug/EXE")
+    add_subdirectory("VirtualDevices/Diagnostic" "VirtualDevices/Diagnostic")
+    add_subdirectory("VirtualDevices/Dx10" "VirtualDevices/Dx10")
+    add_subdirectory("VirtualDevices/Dx11" "VirtualDevices/Dx11")
+    add_subdirectory("VirtualDevices/Null" "VirtualDevices/Null")
+    add_subdirectory("VirtualDevices/Dx9" "VirtualDevices/Dx9")
+    add_subdirectory("VirtualDevices/GLCoreProfile" "VirtualDevices/GLCoreProfile")
+    add_subdirectory("VirtualDevices/GL3" "VirtualDevices/GL3")
+    add_subdirectory("VirtualDevices/OGSFXCompilerApp" "OGSFXCompilerApp")
+    if (GLES)
+     # Enable PC emulation of OpenGL ES
+     add_subdirectory("VirtualDevices/GLES20" "VirtualDevices/GLES20")
+    endif (GLES)
+    add_subdirectory("HardwareCompatibility" "HardwareCompatibility")
+    add_subdirectory("CertificationUtility" "CertificationUtility")
+    add_subdirectory("Trace" "Trace")
+elseif (APPLE)
+    add_subdirectory("VirtualDevices/GLCoreProfile" "VirtualDevices/GLCoreProfile")
+    add_subdirectory("VirtualDevices/GL3" "VirtualDevices/GL3")
+    add_subdirectory("FontDevice/FreeType" "FontDevice/FreeType")
+    add_subdirectory("SHFontParser" "SHFontParser")
+    add_subdirectory("FontDevice/SHX" "FontDevice/SHX")
+    add_subdirectory("LangHandler/Mac" "LangHandler/Mac")
+    add_subdirectory("RapidRT" "RapidRT")
+    add_subdirectory("RapidRT/RapidRTShaders" "RapidRT/RapidRTShaders")
+    add_subdirectory("RapidRT/RapidRTShaderInterface" "RapidRT/RapidRTShaderInterface")
+    add_subdirectory("CertificationUtility" "CertificationUtility")
+    add_subdirectory("FragDebug/LIB" "FragDebug/LIB")
+    add_subdirectory("FragDebug/DLL" "FragDebug/DLL")
+    add_subdirectory("FragDebug/EXE" "FragDebug/EXE")
+elseif (NOT APPLE AND UNIX)
+    add_subdirectory("VirtualDevices/GLCoreProfile" "VirtualDevices/GLCoreProfile")
+    add_subdirectory("VirtualDevices/GL3" "VirtualDevices/GL3")
+    add_subdirectory("FontDevice/FreeTypeOld" "FontDevice/FreeTypeOld")
+    add_subdirectory("SHFontParser" "SHFontParser")
+    add_subdirectory("FontDevice/SHX" "FontDevice/SHX")
+endif (WIN32)
+
+install(DIRECTORY "${ogs_inc_dir}"
+        DESTINATION "${toolkit_inc_dir}/AIRViz"
+        PATTERN "Version.in" EXCLUDE)
+
+if(APPLE)
+install(DIRECTORY "${external_tbb_dir}/include/tbb"
+        DESTINATION "${toolkit_inc_dir}/External")
+install(DIRECTORY "${external_ziparchive_dir}/include/"
+        DESTINATION "${toolkit_inc_dir}/External/ZIPARCHIVE")
+endif(APPLE)
+
