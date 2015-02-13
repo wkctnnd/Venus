@@ -4,7 +4,7 @@
 #define ALIGN4 4
 namespace Venus
 {
-	namespace Memory
+	namespace Utility
 	{
 
 		class Allocator

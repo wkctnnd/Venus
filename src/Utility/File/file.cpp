@@ -10,7 +10,7 @@
 
 namespace Venus
 {
-	namespace File
+	namespace Utility
 	{
 		VFile::VFile()
 		{

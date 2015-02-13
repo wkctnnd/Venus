@@ -1,103 +1,60 @@
 cmake_minimum_required(VERSION 2.8)
 PROJECT(Venus)
-macro(source_group_by_dir source_files11)
-    if(MSVC)
-        set(sgbd_cur_dir ${CMAKE_CURRENT_SOURCE_DIR})
-        foreach(sgbd_file ${${source_files}})
-            string(REGEX REPLACE ${sgbd_cur_dir}/\(.*\) \\1 sgbd_fpath ${sgbd_file})
-            string(REGEX REPLACE "\(.*\)/.*" \\1 sgbd_group_name ${sgbd_fpath})
-            string(COMPARE EQUAL ${sgbd_fpath} ${sgbd_group_name} sgbd_nogroup)
-            string(REPLACE "/" "\\" sgbd_group_name ${sgbd_group_name})
-            if(sgbd_nogroup)
-                set(sgbd_group_name "\\")
-            endif(sgbd_nogroup)
-            source_group(${sgbd_group_name} FILES ${sgbd_file})
-        endforeach(sgbd_file)
-    endif(MSVC)
-endmacro(source_group_by_dir11)
+
+#set venus top directory
+set(VenusDir ${CMAKE_CURRENT_SOURCE_DIR})
+
+#set sdk directory
+set(VenusInc ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+#set src directory
+set(VenusSrc ${CMAKE_CURRENT_SOURCE_DIR}/src)
+
+#set build directory
+Set(VenusBuild ${CMAKE_CURRENT_SOURCE_DIR}/build)
+
+#set binary directory
+set(VenusBinary ${VenusBuild}/binary)
+
+
+
+#set exe liboutput dir
+SET(EXECUTABLE_OUTPUT_PATH ${VenusBinary}/bin)
+SET(LIBRARY_OUTPUT_PATH ${VenusBinary}/bin)
 
 
 
 
+include(${VenusDir}/sourcegroupbydir.txt)
+include(${VenusDir}/globalinclude.txt)
+
+
+ADD_SUBDIRECTORY(${VenusDir}/src)
 
 
 
-
-
-macro(source_group_by_dir source_files)
-    if(MSVC OR XCODE)
-        if (IOS)
-                # If CMakeLists.txt is not at the same folder as source files(such as, mobile build), 
-                # set the current directory by the additional argument specially for this case.
-                set(sgbd_cur_dir ${ARGN})
-        else (IOS)
-                set(sgbd_cur_dir ${CMAKE_CURRENT_SOURCE_DIR})
-        endif (IOS)
-
-        foreach(sgbd_file ${${source_files}})
-			if (sgbd_file MATCHES ".*\\.h$")
-				#process header files.
-				string(REGEX MATCH ${ogs_inc_dir}/.* in_ogs_inc_dir ${sgbd_file})
-				if (in_ogs_inc_dir)
-					#if header file is in SDK/Include directory, get relative path.
-					string(REGEX REPLACE ${ogs_inc_dir}/OGS/\(.*\) \\1 sgbd_fpath ${sgbd_file})
-				else (in_ogs_inc_dir)
-					#if header file is in project source directory, get relative path.
-					string(REGEX REPLACE ${sgbd_cur_dir}/\(.*\) \\1 sgbd_fpath ${sgbd_file})
-				endif (in_ogs_inc_dir)
-				string(REGEX REPLACE "\(.*\)/.*" \\1 sgbd_group_name ${sgbd_fpath})
-				string(COMPARE EQUAL ${sgbd_fpath} ${sgbd_group_name} sgbd_nogroup)
-				string(REPLACE "/" "\\" sgbd_group_name ${sgbd_group_name})
-				if(sgbd_nogroup)
-					set(sgbd_group_name "\\")
-				endif(sgbd_nogroup)
-				source_group("Header Files\\${sgbd_group_name}" FILES ${sgbd_file})
-			else (sgbd_file MATCHES ".*\\.h$")
-				#process source files.
-				if (sgbd_file MATCHES ".*/OGSNew\\.cpp$")
-					#if source file is OGSNew.cpp, it may not be in the current projcet directory, but
-					#in the ObjectModel directory, we need to take care of this difference.
-					string(REGEX REPLACE ${ogs_dir}/Devel/ObjectModel/\(.*\) \\1 sgbd_fpath ${sgbd_file})
-				else (sgbd_file MATCHES ".*/OGSNew\\.cpp$")
-					string(REGEX REPLACE ${sgbd_cur_dir}/\(.*\) \\1 sgbd_fpath ${sgbd_file})
-				endif (sgbd_file MATCHES ".*/OGSNew\\.cpp$")
-				string(REGEX REPLACE "\(.*\)/.*" \\1 sgbd_group_name ${sgbd_fpath})
-				string(COMPARE EQUAL ${sgbd_fpath} ${sgbd_group_name} sgbd_nogroup)
-				string(REPLACE "/" "\\" sgbd_group_name ${sgbd_group_name})
-				if(sgbd_nogroup)
-					set(sgbd_group_name "\\")
-				endif(sgbd_nogroup)
-				source_group("Source Files\\${sgbd_group_name}" FILES ${sgbd_file})			
-			endif (sgbd_file MATCHES ".*\\.h$")
-        endforeach(sgbd_file)
-    endif(MSVC OR XCODE)
-endmacro(source_group_by_dir)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/include/Graphics)
-LINK_DIRECTORIES({PROJECT_BINARY_DIR}/binary/lib/debug)
-SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/binary/bin)
-
-
-
-SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS ON)
-
-ADD_SUBDIRECTORY(src)
-
+INCLUDE_DIRECTORIES(${VenusInc}/Graphics)
+LINK_DIRECTORIES(${VenusBinary}/lib/debug)
 ADD_EXECUTABLE(test main.cpp)
+target_link_libraries(test DX11)
 
-target_link_libraries(test DX9)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS ON)
+
+
+
 
 

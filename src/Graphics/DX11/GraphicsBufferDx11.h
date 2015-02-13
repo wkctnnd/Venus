@@ -10,7 +10,8 @@ namespace Venus
         {
         public:
             GraphicsBufferDx11(ID3D11Device* device, BufferType type, uint32 size, ResGpuUsage gusage, ResCpuAcess cusage, const void* data = 0);
-            void update();
+            void updateBuffer();
+            ID3D11Buffer* getRealBuffer();
         private:
             void getBufferUsageAccess(ResGpuUsage, ResCpuAcess);
 

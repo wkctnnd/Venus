@@ -3,7 +3,7 @@
 #include<Assert.h>
 namespace Venus
 {
-	namespace Memory
+	namespace Utility
 	{
 			DynamicPoolAllocator::DynamicPoolAllocator(uint32 size = 8)
 			{

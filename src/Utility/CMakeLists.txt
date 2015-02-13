@@ -1,12 +1,11 @@
 cmake_minimum_required(VERSION 2.8)
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/include/Utility)
-
+INCLUDE_DIRECTORIES(${VenusInc}/Utility)
 
 ADD_SUBDIRECTORY(File File)
 ADD_SUBDIRECTORY(Memory Memory)
 ADD_SuBDIRECTORY(Container Container)
  
-#ADD_SUBDIRECTORY(../../include/Utility/Memory)
+FILE(GLOB_RECURSE Container_SOURCE ./Container/*.cpp)
 
 
 FILE(GLOB_RECURSE MAC_FILE_SOURCE ./File/Mac/*.cpp)
@@ -33,7 +32,7 @@ List(APPEND sources ${MAC_FILE_SOURCE} ${WIN_FILE_SOURCE} ${FILE_HEADER} ${MEMOR
 source_group_by_dir(sources)
 
 IF(APPLE)
- ADD_LIBRARY(Utility STATIC ${MAC_FILE_SOURCE} ${MEMORY_SOURCE} ${FILE_HEADER} ${MEMORY_HEADER} ./File/*.cpp)
+ ADD_LIBRARY(Utility STATIC ${MAC_FILE_SOURCE} ${MEMORY_SOURCE} ${FILE_HEADER} ${MEMORY_HEADER} ./File/*.cpp ${Container_SOURCE})
  ELSEIF(WIN32)
-  ADD_LIBRARY(Utility STATIC ${WIN_FILE_SOURCE} ${MEMORY_SOURCE} ${FILE_HEADER} ${MEMORY_HEADER} ./File/*.cpp)
+  ADD_LIBRARY(Utility STATIC ${WIN_FILE_SOURCE} ${MEMORY_SOURCE} ${FILE_HEADER} ${MEMORY_HEADER} ./File/*.cpp ${Container_SOURCE})
 endif()
