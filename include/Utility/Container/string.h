@@ -16,11 +16,13 @@ namespace Venus
 
             size_t length();
             char* getChar();
+            size_t find(VString &s);
             uint32 compare(VString &s);
+            VString subStr(size_t begin, size_t length);
         private:
             char *cStr;
-        }
-    };
+        };
+    }
 }
 
 #endif

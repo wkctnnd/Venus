@@ -43,5 +43,16 @@ namespace Venus
             //cstr maybe null
             return strcmp(cStr, s.getChar());
         }
+
+        size_t VString::find(VString &s)
+        {
+            
+        }
+
+        VString VString::subStr(size_t start, size_t length)
+        {
+
+            return;
+        }
     }
 }

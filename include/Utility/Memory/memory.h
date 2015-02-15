@@ -44,6 +44,7 @@ namespace Venus
 
 
 		//block size is byte unit
+        //best for list not support for random access
 		template <int blocksize>
 		class FixBlockAllocator:public Allocator
 		{ 

@@ -1,6 +1,6 @@
 #include "Memory/memory.h"
 #include<stdlib.h>
-#include<Assert.h>
+#include "assert.h"
 namespace Venus
 {
 	namespace Utility
@@ -47,7 +47,7 @@ namespace Venus
 					q = p;
 				}
 
-				assert(allocateblock != NULL);
+                VAssert(allocateblock != NULL, "");
 				size_t misalign = (size_t)allocateblock;
 				size_t mask = (size_t)allignment - 1;
 				uint32 adjust = misalign & mask;
@@ -65,7 +65,7 @@ namespace Venus
 
 			void DynamicPoolAllocator::dellocate(void* pointer, uint32 size, uint8 alignment)
 			{
-				assert(pointer != NULL);
+				VAssert(pointer != NULL, "");
 				uint8 adjust = ((uint8*)pointer)[-1];
 				freeblock* block = (freeblock *)((size_t)pointer - adjust);
 				block->mNext = (freeblock* )mFreeList;
