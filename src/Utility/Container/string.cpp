@@ -44,6 +44,8 @@ namespace Venus
             return strcmp(cStr, s.getChar());
         }
 
+        uint32 VString::compareCI(VString &s)
+
         size_t VString::find(VString &s)
         {
             

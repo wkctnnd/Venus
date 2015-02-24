@@ -1,10 +1,11 @@
 #include "image.h"
 #include "imageloader.h"
+#include "Container/string.h"
 namespace Venus
 {
     namespace Resource
     {
-        void Image::createFromFile(char* file)
+        void Image::createFromFile(Utility::VString& file)
         {
             
         }

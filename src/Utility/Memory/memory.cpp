@@ -5,82 +5,144 @@ namespace Venus
 {
 	namespace Utility
 	{
-			DynamicPoolAllocator::DynamicPoolAllocator(uint32 size = 8)
+		template<class T>
+		T* Allocator::allocateNew()
+		{
+			void* p = allocate(sizeof(T), _ALIGN_OF(T));
+			VAssert(p != NULL, "bad allocate");
+			return new(p) T;
+		}
+
+		template<class T>
+		T* Allocator::allocateNew(T& t)
+		{
+			void *p = allocate(sizeof(T), _ALIGN_OF(T));
+			VAssert(p != NULL, "bad allocate");
+			return new (p) T(t);
+		}
+
+		template<class T>
+		T* Allocator::allcateNewArray(size_t num)
+		{
+			size_t head = sizeof(size_t) / sizeof(T) + 1;
+			void* p = allocate((sizeof(T) + head) * num, _ALIGN_OF(T));
+			T* mem = (T*)(p) + head;
+			*((size_t*)mem - 1) = num;
+			VAssert(p != NULL, "bad allocate");
+			for (size_t i = 0; i < num; i++)
 			{
-				if(size > 8)
-					mFreeList = (void*) malloc (sizeof(size));
-				freeblock *free = (freeblock *) (mFreeList);
-				free->mNext = NULL;
-				free->msize = size;
+				new(mem) T;
+				mem += sizeof(T);
 			}
+			return mem;
+		}
 
 
-			void* DynamicPoolAllocator::allocate(uint32 size , uint8 allignment)
+		template<class T>
+		void Allocator::dellocateDelete(void* p)
+		{
+			(T*)p->~T();
+			dellocate(p);
+		}
+
+		template<class T>
+		void Allocator::dellocateDeleteArray(void* p)
+		{
+			size_t num = *((size_t*)(p)-1);
+			for(size_t i = 0; i < num; i++)
+				(T*)p -> ~T();
+			size_t head = sizeof(size_t) / sizeof(T) + 1;
+			T* mem = (T*)p -  head;
+			dellocate(p);
+		}
+
+
+		void* StackAllocator::allocate(size_t size, uint8 alignment)
+		{
+
+		}
+
+		void StackAllocator::dellocate(void* p)
+		{
+
+		}
+
+		DynamicPoolAllocator::DynamicPoolAllocator(uint32 size = 8)
+		{
+			if(size > 8)
+				mFreeList = (void*) malloc (sizeof(size));
+			freeblock *free = (freeblock *) (mFreeList);
+			free->mNext = NULL;
+			free->msize = size;
+		}
+
+
+		void* DynamicPoolAllocator::allocate(uint32 size , uint8 allignment)
+		{
+			uint32 expandsize = size + allignment;
+
+			void * allocateblock = NULL;
+			freeblock* p = (freeblock*)mFreeList;
+			freeblock* q = NULL;
+			while (p)
 			{
-				uint32 expandsize = size + allignment;
-
-				void * allocateblock = NULL;
-				freeblock* p = (freeblock*)mFreeList;
-				freeblock* q = NULL;
-				while (p)
-				{
-					uint32 leftsize = p->msize - expandsize;
-					if(leftsize > 0)
-					{	
-						if(leftsize >= 8)
-						{
-							freeblock *splitblock = p + expandsize;
-							splitblock->mNext = p->mNext;
-							splitblock->msize = leftsize;
-							p->mNext = splitblock;
-						}
-
-						if(q == NULL)
-							mFreeList = p->mNext;
-						else
-							q ->mNext = p -> mNext;
-
-						break;
+				uint32 leftsize = p->msize - expandsize;
+				if(leftsize > 0)
+				{	
+					if(leftsize >= 8)
+					{
+						freeblock *splitblock = p + expandsize;
+						splitblock->mNext = p->mNext;
+						splitblock->msize = leftsize;
+						p->mNext = splitblock;
 					}
 
-					p = p->mNext;
-					q = p;
+					if(q == NULL)
+						mFreeList = p->mNext;
+					else
+						q ->mNext = p -> mNext;
+
+					break;
 				}
 
-                VAssert(allocateblock != NULL, "");
-				size_t misalign = (size_t)allocateblock;
-				size_t mask = (size_t)allignment - 1;
-				uint32 adjust = misalign & mask;
-				uint8* block = (uint8* )(misalign + adjust);
-
-				block[-1] = adjust;
-				return allocateblock;
+				p = p->mNext;
+				q = p;
 			}
 
+			VAssert(allocateblock != NULL, "");
+			size_t misalign = (size_t)allocateblock;
+			size_t mask = (size_t)allignment - 1;
+			uint32 adjust = misalign & mask;
+			uint8* block = (uint8* )(misalign + adjust);
 
-			void DynamicPoolAllocator::defragment()
-			{
-			
-			}
+			block[-1] = adjust;
+			return allocateblock;
+		}
 
-			void DynamicPoolAllocator::dellocate(void* pointer, uint32 size, uint8 alignment)
-			{
-				VAssert(pointer != NULL, "");
-				uint8 adjust = ((uint8*)pointer)[-1];
-				freeblock* block = (freeblock *)((size_t)pointer - adjust);
-				block->mNext = (freeblock* )mFreeList;
-				block->msize = size + alignment;
-				mFreeList = block;
-			}
 
-			void* Venus_new( uint32 size, Allocator *allocator = 0, uint8 alignment = ALIGN4)
-			{
-				allocator->allocate(size, alignment);
-			}
+		void DynamicPoolAllocator::defragment()
+		{
 
-			void Venus_delete(void *pointer, uint32 size, Allocator *allocator = 0, uint8 alignment = ALIGN4)
-			{
-				allocator->dellocate(pointer, size, alignment);
-			}
+		}
+
+		void DynamicPoolAllocator::dellocate(void* pointer, uint32 size, uint8 alignment)
+		{
+			VAssert(pointer != NULL, "");
+			uint8 adjust = ((uint8*)pointer)[-1];
+			freeblock* block = (freeblock *)((size_t)pointer - adjust);
+			block->mNext = (freeblock* )mFreeList;
+			block->msize = size + alignment;
+			mFreeList = block;
+		}
+
+		void* Venus_new( uint32 size, Allocator *allocator = 0, uint8 alignment = ALIGN4)
+		{
+			allocator->allocate(size, alignment);
+		}
+
+		void Venus_delete(void *pointer, uint32 size, Allocator *allocator = 0, uint8 alignment = ALIGN4)
+		{
+			allocator->dellocate(pointer, size, alignment);
+		}
 	}
 }

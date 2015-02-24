@@ -12,57 +12,33 @@ namespace Venus
 {
 	namespace Utility
 	{
-		VFile::VFile()
+		VFile::VFile(VString& file, FileAcess acess, FileOpenMode mode, bool shared, bool asyn)
 		{
 #if (defined VENUS_WIN32) || (defined VENUS_WIN32)
 			implementation = new WinFileImp();
 #elif defined VENUS_MAC
 			implementation = new MacFileImp();
 #endif
-			
+			open(file, access, mode, shared, asyn);
 		}
 
-		bool VFile::open(std::string file, FileAcess acess)
+		bool VFile::open(VString &file, FileAcess access, FileOpenMode mode, bool shared, bool asyn)
 		{
-			std::string path;
-			std::string name;
-			std::string ext;
-
-			spliteFilePath(file, path, name ,ext);
-			if (path.empty())
-			{
-				if (ext.empty())
-				{
-					path = mDefaultpath;
-				}
-				else if(ext.compare("mesh"))
-				{
-					
-				}
-				else if(ext.compare("hlsl"))
-				{
-				
-				}
-				else
-				{
-					assert(0);
-					//unknow ext
-				}
-			}
-
-			assert(name.empty()==0);
-			std::string fullpath = path+name+ext;
-			implementation->open(fullpath, acess);
+			implementation->open(file, access, mode, shared, asyn);
 		}
 
+        uint32 VFile::synRead(void* p, uint32 size)
+        {
+            implementation->synRead(p, size);
+        }
 		void VFile::close()
 		{
 			implementation->close();
 		}
 
-		void VFile::spliteFilePath(std:: string filepath, std::string& path, std::string& name, std::string& ext)
-		{
-			
-		}
+        void VFile::seekPosition(int64 offset, StartPosition pos)
+        {
+            implementation->seekPosition(offset, pos);
+        }
 	}
 }

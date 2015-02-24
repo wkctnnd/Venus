@@ -18,6 +18,8 @@ namespace Venus
             char* getChar();
             size_t find(VString &s);
             uint32 compare(VString &s);
+            //case-insensitive
+            uint32 compareCI(VString &s);
             VString subStr(size_t begin, size_t length);
         private:
             char *cStr;

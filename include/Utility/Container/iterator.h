@@ -11,11 +11,14 @@ namespace Venus
         {
             public:
                 virtual T* operator ->() = 0;
-                virtual void operator ++() = 0;
-                virtual void operator --() = 0;
-                virtual bool operator !=() = 0;
-                virtual bool operator ==() =  0;
-                virtual T* getAt(size_t i) = 0;
+                virtual Random_Iterator& operator ++() = 0;
+                virtual Random_Iterator& operator --() = 0;
+                virtual bool operator != (Random_Iterator&) = 0;
+                virtual bool operator == (Random_Iterator&) =  0;
+                virtual bool operator < (Random_Iterator&) = 0;
+                virtual bool operator <= (Random_Iterator&) = 0;
+                virtual Random_Iterator& operator + (Random_Iterator&);
+                virtual Random_Iterator& operator - (Random_Iterator&);
         };
 
         template<class T>

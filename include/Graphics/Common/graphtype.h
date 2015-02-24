@@ -1,20 +1,41 @@
-enum BufferType
-{
-    Index_Buffer,
-    Vertex_Buffer,
-    Constant_Buffer,
-};
+#ifndef GRAPHTYPE_H
+#define GRAPHTYPE_H
 
-enum ResGpuUsage
+namespace Venus
 {
-    Imutable,
-    Default,
-    Dynamic,
-    Stage
-};
+    enum BufferType
+    {
+        Index_Buffer,
+        Vertex_Buffer,
+        Constant_Buffer,
+    };
 
-enum ResCpuAcess
-{
-    WriteOnly,
-    ReadOnly
-};
+    enum ResGpuUsage
+    {
+        Imutable,
+        Default,
+        Dynamic,
+        Stage
+    };
+
+    enum ResCpuAcess
+    {
+        WriteOnly,
+        ReadOnly
+    };
+
+    enum TextureType
+    {
+        Texture1D,
+        Texture2D,
+        Texture3D,
+        TextureCube,
+        Texture1DArray,
+        Texture2DArray,
+        TextureCubeArray,
+    };
+}
+
+#endif
+
+

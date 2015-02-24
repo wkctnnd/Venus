@@ -6,16 +6,48 @@ namespace Venus
 {
 	namespace Utility
 	{
-
+         //http://blog.csdn.net/amwihihc/article/details/8813565
 		class Allocator
 		{
 		public:
-			void *allocate(uint32 size, uint8 alignment);
-			void dellocate(void* p, uint32 size, uint8 alignment);
+			virtual void *allocate(size_t size, uint8 alignment) = 0;
+			virtual void dellocate(void* p) = 0;
 
+            template<class T>
+            T* allocateNew();
+
+            template<class T>
+            T* allocateNew(T&);
+
+            template<class T>
+            void dellocateDelete(void* p);
+
+            template<class T>
+            T* allocateNewArray(size_t num);
+
+            template<class T>
+            void dellocateDeleteArray();
 		};
 
 		
+
+
+        class StackAllocator:public Allocator
+        {
+        public:
+            struct Header
+            {
+                size_t sPrePosition;
+                size_t sLength;
+            };
+            StackAllocator(size_t size);
+            void *allocate(size_t size, uint8 alignment);
+            void dellocate(void* p);
+        private:
+            size_t sCurPosition;
+            size_t sLength;
+        };
+
 
 		class DynamicPoolAllocator:public Allocator
 		{
@@ -29,13 +61,13 @@ namespace Venus
 			void *mFreeList;
 		
 		public:
-			DynamicPoolAllocator(uint32 size = 8);
+			DynamicPoolAllocator(size_t size = 8);
 
 			void* allocate(uint32 size , uint8 allignment);
 
 			void defragment();
 
-			void dellocate(void* pointer, uint32 size, uint8 alignment);
+			void dellocate(void* p);
 
 		};
 
