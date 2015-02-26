@@ -1,5 +1,7 @@
 #ifndef CONTEXT_H
 #define CONTEXT_H
+
+//use to switch among immediate context and deferred context.
 namespace Venus
 {
     namespace Graphics

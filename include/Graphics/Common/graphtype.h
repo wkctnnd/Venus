@@ -34,6 +34,13 @@ namespace Venus
         Texture2DArray,
         TextureCubeArray,
     };
+
+    enum ResType
+    {
+        CPU_RES,
+        GPU_RES,
+        DISK_RES,
+    };
 }
 
 #endif
