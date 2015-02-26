@@ -11,6 +11,18 @@ namespace Venus
         public:
             struct TextureInfo
             {
+                TextureInfo(TextureInfo &info)
+                {
+                    mType = info.mType;
+                    uWidth = info.uWidth;
+                    uHeight = info.uHeight;
+                    uDepth = info.uDepth;
+                    uArrayNum = info.uArrayNum;
+                    uMipNum = info.uMipNum;
+
+                    mGusage = info.mGusage;
+                    mCusage = info.mCusage;
+                }
                 TextureType mType;
                 uint32 uWidth;
                 uint32 uHeight;
@@ -24,13 +36,13 @@ namespace Venus
                 ResCpuAcess mCusage;
             };
 
-            TextureDx11(ID3D11Device* device, TextureInfo &info, const void* data = 0);
+            TextureDx11(ID3D11Device* device, TextureInfo &info, const Image* image = 0);
             ~TextureDx11();
             void updateSubTexture(void* data, uint32 mip, uint32 array, uint32 face = 0);
             ID3D11Resource* getRealTexture(){return mTexture;}
             TextureType getType(){return mInfo.mType;}
         private:
-            void getTextureUsageAccess(ResGpuUsage, ResCpuAcess);
+            void getUsageAccess(D3D11_USAGE &usage, D3D11_CPU_ACCESS_FLAG &access);
             TextureInfo mInfo;
             ID3D11Resource *mTexture;
             ResType mType;
