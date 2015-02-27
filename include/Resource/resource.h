@@ -18,7 +18,7 @@ namespace Venus
 
         protected:
             size_t mKey;
-        } 
+        }; 
     }
 ]
 

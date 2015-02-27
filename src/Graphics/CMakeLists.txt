@@ -1,14 +1,16 @@
 cmake_minimum_required(VERSION 2.8)
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/include/Graphics)
+INCLUDE_DIRECTORIES(${VenusInc}/Graphics)
+INCLUDE_DIRECTORIES(${VenusInc}/Resource)
 
 MESSAGE(STATUS ${PROJECT_BINARY_DIR})
 MESSAGE(STATUS ${PROJECT_SOURCE_DIR})
 
 
 FILE(GLOB_RECURSE SOURCE_1 *.cpp)
-FILE(GLOB_RECURSE SOURCE_2 *.h)
+FILE(GLOB_RECURSE SOURCE_1 *.h)
+FILE(GLOB_RECURSE GRAPHICS_HEADER ${VenusInc}/Graphics/*.h)
 
-set(all_files ${SOURCE_1} ${SOURCE_2})
+set(all_files ${SOURCE_1} ${SOURCE_2} ${GRAPHICS_HEADER})
 
 source_group_by_dir(all_files)
 

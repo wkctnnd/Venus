@@ -1,5 +1,5 @@
-#include "image.h"
-#include "imageloader.h"
+#include "D:\engine\Venus\include\Resource\image.h"
+//#include "imageloader.h"
 #include "Container/string.h"
 namespace Venus
 {
@@ -7,7 +7,14 @@ namespace Venus
     {
         void Image::createFromFile(Utility::VString& file)
         {
-            
+
         }
+
+        void Image::createFromMemory(void* memory)
+        {
+
+        }
+
+
     }
 }

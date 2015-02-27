@@ -2,15 +2,17 @@
 #define TEXTURE_H
 namespace Venus
 {
-    namespace Graphics
+    namespace Resource
     {
         class Image;
     }
+    namespace Graphics
+    {
         class Texture
         {
         public:
-            void update(Graphics::Image *src)
-        }
+            void update(Resource::Image *src);
+        };
     }
 }
 

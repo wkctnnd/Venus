@@ -4,6 +4,10 @@
 #include <d3d11.h>
 namespace Venus
 {
+    namespace Resource
+    {
+        class Image;
+    }
     namespace Graphics
     {
         class TextureDx11:public Texture
@@ -36,7 +40,15 @@ namespace Venus
                 ResCpuAcess mCusage;
             };
 
-            TextureDx11(ID3D11Device* device, TextureInfo &info, const Image* image = 0);
+            //start point of sub image region or can use image.getsubimage instead
+            struct Subregion
+            {
+                uint32 uOffsetX;
+                uint32 uOffsetY;
+                uint32 uOffsetZ;
+            };
+
+            TextureDx11(ID3D11Device* device, TextureInfo &info, Subregion *region, Resource::Image* image = 0);
             ~TextureDx11();
             void updateSubTexture(void* data, uint32 mip, uint32 array, uint32 face = 0);
             ID3D11Resource* getRealTexture(){return mTexture;}
