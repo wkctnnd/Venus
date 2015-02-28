@@ -44,7 +44,18 @@ namespace Venus
 
         void* Image::getData(uint32 array, uint32 mip = 0)
         {
-            
+             uint32 formatsize=mInfo.mFormat.size();
+
+            switch (mInfo.bComposite)
+            {
+            case 0:
+                {
+                   
+                }
+            case 1:
+            default:
+                break;
+            }
         }
 
 

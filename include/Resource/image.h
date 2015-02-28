@@ -4,7 +4,7 @@
 //#include "resource.h"
 //#include "Container\vector.h"
 #include "resenum.h"
-
+#include "ColorFormat.h"
 namespace Venus
 {
     namespace Utility
@@ -43,7 +43,7 @@ namespace Venus
                
                 uint32 uArrayNum;
 
-                ColorFormat mFormat;
+                VColorFormat mFormat;
                 uint32 mMipNum;
 
              //Image is in either composite of data or Images. If pData is not null contains
