@@ -34,7 +34,7 @@ namespace Venus
         {
             // ImageCompositor;
         public:
-
+            friend ImageCompositor;
             struct ImageInfo
             {
                 uint32 uWidth;
@@ -57,6 +57,7 @@ namespace Venus
                 uint16 bComposite;
             };
             Image();
+            Image(ImageInfo& i);
             ~Image();
 
             void createFromFile(Utility::VString &file);
@@ -88,6 +89,12 @@ namespace Venus
         private:  
             ImageInfo mInfo;
              void* pData;
+             bool bIsDirty;
+
+             //bad use to avoiding memory and cpu power waste to compute size of each mipmap level
+             uint32* pMipmapchainsize;
+
+             void calMipMapChainSize();
         };
 
 

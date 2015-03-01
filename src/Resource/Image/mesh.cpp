@@ -92,23 +92,5 @@ namespace Venus
 
             
         }
-
-        Image *ImageCompositor::CompositeArray(Image *image[], uint32 size)
-        {
-            Image* i = new Image(image[0]->mInfo);
-            i->pData = (void*)image;
-
-            i->mInfo.bComposite = 1;
-            i->mInfo.uArrayNum = size;
-        }
-
-        Image *ImageCompositor::CompositeMipMap(Image* image[], uint32 size)
-        {
-            Image *i = new Image(image[0]->mInfo);
-            i->pData = (void*)image;
-
-            i->mInfo.bComposite = 2;
-            i->mInfo.mMipNum = size;
-        }
     }
 }
