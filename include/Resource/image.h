@@ -92,7 +92,7 @@ namespace Venus
              bool bIsDirty;
 
              //bad use to avoiding memory and cpu power waste to compute size of each mipmap level
-             uint32* pMipmapchainsize;
+             uint32* pMipmapoffset;
 
              void calMipMapChainSize();
         };
