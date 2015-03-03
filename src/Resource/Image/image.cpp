@@ -44,13 +44,13 @@ namespace Venus
 
         void* Image::getData(uint32 array, uint32 mip = 0)
         {
-            calMipMapChainSize();
+            calMipMapChainOffset();
              void *data;
             switch (mInfo.bComposite)
             {
             case 0:
                 {
-                   data = (char*)pData + array * pMipmapchainsize[mInfo.mMipNum] + pMipmapchainsize[mip];
+                   data = (char*)pData + array * pMipmapOffset[mInfo.mMipNum - 1] + pMipmapOffset[mInfo.mMipNum];
                    break;
                 }
             case 1:
@@ -69,28 +69,25 @@ namespace Venus
             return data;
         }
 
-        void Image::calMipMapChainSize()
+        void Image::calMipMapChainOffset()
         {
-            if (pMipmapchainsize == 0)
+            if (pMipmapOffset == 0)
             {
-                 pMipmapchainsize = new uint32[mInfo.mMipNum + 1];
+                 pMipmapOffset = new uint32[mInfo.mMipNum + 1];
             }
             uint32 width = mInfo.uWidth;
             uint32 height = mInfo.uHeight;
             uint32 depth = mInfo.uDepth;
             uint32 formatsize = mInfo.mFormat.size(); 
-            pMipmapchainsize[mInfo.mMipNum] = 0;
-            for (uint32 i = 0; i< mInfo.mMipNum; i++)
+            pMipmapOffset[0] = 0;
+            for (uint32 i = 1; i<= mInfo.mMipNum; i++)
             {
                 width > 1 ? width = width >> 1 : 1;
                 depth > 1 ? depth = depth >> 1 : 1;
                 height > 1 ? height = height >> 1 : 1;
+                pMipmapOffset[i] = pMipmapOffset[i - 1] + width * depth * height * formatsize;
 
-                pMipmapchainsize[i] = width * depth * height * formatsize;
-                pMipmapchainsize[mInfo.mMipNum] += pMipmapchainsize[i]; 
-            }
-
-            
+            }      
         }
 
         Image *ImageCompositor::CompositeArray(Image *image[], uint32 size)
