@@ -14,7 +14,7 @@ namespace Venus
     namespace Resource
     {
         class Image;
-
+        class ImageLoader;
         //used to composite many image to a composite image.
         class ImageCompositor
         {
@@ -60,7 +60,7 @@ namespace Venus
             Image(ImageInfo& i);
             ~Image();
 
-            void createFromFile(Utility::VString &file);
+            void createFromFile(Utility::VString &file, ImageLoader*);
             void createFromMemory(void* memory);
 
             void genMipMap();

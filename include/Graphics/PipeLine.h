@@ -7,12 +7,12 @@ namespace Venus
 {
     namespace Graphics
     {
-
+        class InputAssemble;
         class PipeLine
         {
         public:
-
-        }
+            void setInputAssemble(InputAssemble *);
+        };
     }
 }
 

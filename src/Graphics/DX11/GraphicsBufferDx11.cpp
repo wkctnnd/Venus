@@ -30,8 +30,6 @@ namespace Venus
             data.SysMemPitch = 
             data.SysMemSlicePitch = 1;
             HRESULT hr = device->CreateBuffer(&desc, &data, &mBuffer);
-
-
         }
 
 

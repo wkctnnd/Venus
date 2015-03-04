@@ -31,8 +31,6 @@ namespace Venus
                         }
                     }
                 }
-
-
             }
 
             D3D11_USAGE usage;
@@ -106,7 +104,7 @@ namespace Venus
 
         void TextureDx11::updateSubTexture(void* data, uint32 mip, uint32 array, uint32 face = 0)
         {
-
+            UpdateSubresource(
         }
 
         void TextureDx11::getUsageAccess(D3D11_USAGE &usage, D3D11_CPU_ACCESS_FLAG &access)

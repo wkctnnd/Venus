@@ -3,13 +3,14 @@
 #include "Container/string.h"
 #include<cmath>
 #include"assert.h"
+#include "imageloader.h"
 namespace Venus
 {
     namespace Resource
     {
-        void Image::createFromFile(Utility::VString& file)
+        void Image::createFromFile(Utility::VString& file, ImageLoader* loader)
         {
-
+            loader->loadImageFile(file, this);
         }
 
         void Image::createFromMemory(void* memory)

@@ -4,6 +4,7 @@
 #include "Common/graphtype.h"
 #include "Context.h"
 #include <d3d11.h>
+#include <type.h>
 namespace Venus
 {
     namespace Graphics
@@ -11,11 +12,13 @@ namespace Venus
         class ContextDx11:public Context
         {
         public:
-            void switchContext();
-            viod getCurrentContext();
+            void switchContext(uint32);
+            Context* getCurrentContext();
         private:
-            
-             
+            //ppDeviceContext context pointer pool.
+            //0 is imediate context
+             ID3D11DeviceContext **ppDeviceContext;
+             uint32 uCurrentContext;
         };
 
     }
