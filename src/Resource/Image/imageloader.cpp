@@ -26,14 +26,16 @@ namespace Venus
 
         class pngImageLoader
         {
+
         public :
             static void LoadImageFile(Utility::VString &file, const Image* image);
         };
-        
+
         //http://blog.csdn.net/songjinshi/article/details/7207735
         //http://blog.chinaunix.net/uid-23592843-id-150648.html
         class bmpImageLoader
         {
+            friend Image;
         public:
             struct BITMAP_HEADER  
             {  
@@ -58,103 +60,166 @@ namespace Venus
                 uint32                _colors;                            ///< 位图使用的颜色数。如8-位/像素表示为100h或者 256.  
                 uint32                _important_colors;                  ///< 指定重要的颜色数。当该域的值等于颜色数时，表示所有颜色都一样重要  
             };
-               
-              char                _palette[256][4];                   ///< 调色板规范。对于调色板中的每个表项，这4个字节用下述方法来描述RGB的值：, 1字节用于蓝色分量 , 1字节用于绿色分量 , 1字节用于红色分量 , 1字节用于填充符(设置为0)调色板数据,24位及以上像素没有该数据  
 
+            struct tagRGBQUAD {
+                uint8 rgbBlue; //该颜色的蓝色分量
+                uint8 rgbGreen; //该颜色的绿色分量
+                uint8 rgbRed; //该颜色的红色分量
+                uint8 rgbReserved; //保留值
+            }; 
 
             static void LoadImageFile(Utility::VString &filename, const Image* image)
             {
+                tagRGBQUAD pllate[256];
                 Utility::VFile *file = new Utility::VFile(filename);
                 BITMAP_HEADER head;
-                BITMAP_INFOR_HEADER inforhead;
+                BITMAP_INFOR_HEADER infohead;
                 //the sizeof(BITMAP_HEADER) can be affected by memory align, maybe has problem
-                file->synRead(&head, sizeof(BITMAP_HEADER), 0);
+                file->synRead(&head, sizeof(BITMAP_HEADER));
                 if (head._id0=='B'&&head._id1=='M')
                 {
-                     BITMAP_INFOR_HEADER infohead;
-                     file->synRead(&head, sizeof(BITMAP_HEADER), 0);
-                     Image::ImageInfo info;
-                     //VAssert(inforhead._compression == 0, "not support compressed bmp");
-                     uint32 paletteSize;
-                     bool hasPalette;
-                     infohead._important_colors == 0 ? inforhead._important_colors = pow(2.0,inforhead._bits_per_pixel) : inforhead._important_colors;
-                     switch (infohead._bits_per_pixel)
-                     {
-                     case 1:
-                     case 4:
-                     case 8:
-                         hasPalette = true;
-                         break;
-                     case 16:
-                        
+                    BITMAP_INFOR_HEADER infohead;
+                    char *index = 0;
+                    file->synRead(&head, sizeof(BITMAP_HEADER), 0);
+                    Image::ImageInfo info;
+                    //VAssert(inforhead._compression == 0, "not support compressed bmp");
+                    uint32 paletteSize;
+                    infohead._important_colors == 0 ? infohead._important_colors = pow(2.0,infohead._bits_per_pixel) : infohead._important_colors;
+                    switch (infohead._bits_per_pixel)
+                    {
+                    case 1:
+                    case 4:
+                    case 8:
+                        //read pallet data;
+                        file->seekPosition(infohead._bitmap_header_size + sizeof(BITMAP_HEADER), Utility::VFile::FileBegin);
+                        file->synRead(pllate, sizeof(tagRGBQUAD) * paletteSize);
+                        char *index = new char[infohead._width * infohead._bits_per_pixel / 8];
+                        //hasPalette = true;
+                        break;
+                    case 16:
+
                         if (infohead._compression == 0)
                         {
-                            hasPalette = false;
-                             info.mFormat = VB5G5R5;
+                            //hasPalette = false;
+                            info.mFormat = VB5G5R5;
                         }
                         else if (infohead._compression == 3)
                         {
-                            uint32 mask_red;
-                            uint32 mask_blue;
-                            uint32 mask_green;
+                            uint32 mask[3];
 
-                            if (mask_red == 0x7C00 && mask_blue == 0x03E0 && mask_green == 0x001F)
+                            file->seekPosition(infohead._bitmap_header_size + sizeof(BITMAP_HEADER), Utility::VFile::FileBegin);
+                            file->synRead(mask, 3 * sizeof(uint32));
+                            if (mask[0] == 0x7C00 && mask[1] == 0x03E0 && mask[2] == 0x001F)
                             {
                                 info.mFormat = VB5G6R5;
                             }
-                            else if(mask_red == 0xF800 && mask_green == 0x07E0 && mask_blue == 0x001F)
+                            else if(mask[0] == 0xF800 && mask[1] == 0x07E0 && mask[2] == 0x001F)
                             {
                                 info.mFormat = VB5G6R5;
                             }
-                             file->synRead(&head, sizeof(BITMAP_HEADER), 0);
+                            file->synRead(&head, sizeof(BITMAP_HEADER));
                             infohead._important_colors = sizeof(uint32) * 3;
                         }
-                         break;
-                     
-                         break;
-                     
+                        break;
+                    case 24:
+                        info.mFormat = VB8G8R8;
+                        break;
+                    case 32:
+                        info.mFormat = VB8G8R8A8;
+                        break;
+                    default:
+                        break;
+                    }
 
-                         break;
-                     case 24:
-                         hasPalette = false;
-                         info.mFormat = VB8G8R8;
-                         break;
-                     case 32:
-                         hasPalette = false;
-                         info.mFormat = VB8G8R8A8;
-                         break;
-                     default:
-                         break;
-                     }
-                 
                     info.uWidth = head._width;
                     info.uHeight = head._height;
                     info.uDepth = 1;
                     info.mMipNum = 1;
                     info.uArrayNum = 1;
+
+                    //read image data;
                     file->seekPosition(head._bitmap_data_offset, Utility::VFile::FileBegin);
                     void *imagedata = (void*)malloc(infohead._bitmap_data_size);
                     file->synRead(imagedata, infohead._bitmap_data_size);
+                    char *p = (char*)imagedata;
+                    char* internalImageData = new char[];
+                    uint32 realpitch = info.uWidth * infohead._bits_per_pixel / 8;
+                    uint32 pitch = info.uWidth * infohead._bits_per_pixel / 8;
+                    info.uWidth * infohead._bits_per_pixel % 32 == 0 ? pitch = pitch : pitch + 1;
 
-                    if (hasPalette)
+                    for (uint32 i = 0; i < info.uHeight; i++)
                     {
-                        //getpalette
-                        file->seekPosition(infohead._bitmap_header_size, Utility::VFile::FileBegin);
-                        file->synRead(&_palette, infohead._important_colors );
-
+                        memcpy(internalImageData, p, realpitch);
+                        p += pitch;                                
                     }
-                    void* finalImageData = dataTrime(imagedata);
-                    image->setImageInfo(info);
+                    char* finalImageData = internalImageData;
+                    if (infohead._bits_per_pixel < 24)
+                    {
+                        finalImageData = new char[infohead._width * infohead._height * 32];
+                        info.mFormat = VB8G8R8A8;
+
+                        for (uint32 i = 0; i < infohead._height; i++)
+                        {
+                            uint32 bytesize = infohead._width * infohead._bits_per_pixel / 8;
+                            for (uint32 j = 0; j < bytesize; j++)
+                            {
+                                uint32 index = i * bytesize + j; 
+                                uint8 m = internalImageData[index];
+                                uint32 icount = 0;
+                                switch (infohead._bits_per_pixel)
+                                {
+                                case 1:
+                                    {
+                                        uint8 mask = 0x01;
+                                        for (uint32 k = 0; k < 8; k++)
+                                        {
+                                            uint8 realindex = m & mask;
+                                            mask = mask << 1;
+                                            ((tagRGBQUAD*)finalImageData)->rgbBlue = pllate[internalImageData[realindex]].rgbBlue;
+                                            ((tagRGBQUAD*)finalImageData)->rgbGreen = pllate[internalImageData[realindex]].rgbGreen;
+                                            ((tagRGBQUAD*)finalImageData)->rgbRed = pllate[internalImageData[realindex]].rgbRed;
+                                            ((tagRGBQUAD*)finalImageData)->rgbReserved = pllate[internalImageData[realindex]].rgbReserved;
+                                            if (icount++ >infohead._width)
+                                                break;
+                                        }
+                                        
+                                    }
+                                case 4:
+                                    {
+                                        uint8 mask = 0x0F;
+                                        for (uint32 k = 0; k < 2; k++)
+                                        {
+                                            uint8 realindex = m & mask;
+                                            mask = mask << 4;
+                                            ((tagRGBQUAD*)finalImageData)->rgbBlue = pllate[internalImageData[realindex]].rgbBlue;
+                                            ((tagRGBQUAD*)finalImageData)->rgbGreen = pllate[internalImageData[realindex]].rgbGreen;
+                                            ((tagRGBQUAD*)finalImageData)->rgbRed = pllate[internalImageData[realindex]].rgbRed;
+                                            ((tagRGBQUAD*)finalImageData)->rgbReserved = pllate[internalImageData[realindex]].rgbReserved;
+                                            if (icount++ >infohead._width)
+                                                break;
+                                        }
+                                    }
+                                case 8:
+                                    {
+                                        ((tagRGBQUAD*)finalImageData)->rgbBlue = pllate[internalImageData[index]].rgbBlue;
+                                        ((tagRGBQUAD*)finalImageData)->rgbGreen = pllate[internalImageData[index]].rgbGreen;
+                                        ((tagRGBQUAD*)finalImageData)->rgbRed = pllate[internalImageData[index]].rgbRed;
+                                        ((tagRGBQUAD*)finalImageData)->rgbReserved = pllate[internalImageData[index]].rgbReserved;
+                                    }
+                                }
+                            }
+                        }
+                      
+                    }
+          
+          
+                    image->mInfo = info;
                     image->setImageData(finalImageData);
                 }
-               
-                
+
+
             private:
-                void* dataTrime(void* data)
-                {
-
-                }
-
+               
                 void* PaletteConvertToBGR32(void *pallet, void* data)
                 {
 

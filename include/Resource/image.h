@@ -14,7 +14,7 @@ namespace Venus
     namespace Resource
     {
         class Image;
-        class ImageLoader;
+       
         //used to composite many image to a composite image.
         class ImageCompositor
         {
@@ -35,6 +35,7 @@ namespace Venus
             // ImageCompositor;
         public:
             friend ImageCompositor;
+            friend bmpImageLoader;
             struct ImageInfo
             {
                 uint32 uWidth;

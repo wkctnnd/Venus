@@ -1,13 +1,18 @@
 #ifndef VERTEXDECLARATION_H
 #define VERTEXDECLARATION_H
 #include "Container\vector.h"
+#include"graphtype.h"
+
 namespace Venus
 {
     namespace Graphics
     {
-        class VertexElement
+        class VertexAttribute
         {
-            
+            VertexSemantic mSemantic;
+            uint32 uStream;
+            uint32 uIndex;
+            uint32 uInstanceStep;
         };
         class VertexDeclaration
         {
@@ -18,7 +23,7 @@ namespace Venus
             void addTextureCoord();
             void addNormal();
         private:
-            Utility::VVector<VertexElement> vVertexDecalare;
+            Utility::VVector<VertexAttribute> vVertexDecalare;
         };
     }
 }

@@ -41,6 +41,14 @@ namespace Venus
         GPU_RES,
         DISK_RES,
     };
+
+    enum VertexSemantic
+    {
+        POSITION,
+        NORMAL,
+        BINORMAL,
+        TANGENT,
+    };
 }
 
 #endif
