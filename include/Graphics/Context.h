@@ -10,7 +10,7 @@ namespace Venus
         class Context
         {
         public:
-            void switchContext();
+            void begine();
         }
     }
 }

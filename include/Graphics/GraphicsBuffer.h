@@ -1,27 +1,32 @@
 #ifndef GRAPHICSBUFFER_H
 #define GRAPHICSBUFFER_H
-
-class GraphicsBuffer
+#include "Common\graphtype.h"
+namespace Venus
 {
-public:
-    GraphicsBuffer(BufferType type, UINT32 size)
+    namespace Graphics
     {
-        mType = type; 
-        size = uSize;
+        class GraphicsBuffer
+        {
+        public:
+            GraphicsBuffer(BufferType type, UINT32 size)
+            {
+                mType = type; 
+                size = uSize;
+            }
+            virtual void update(){};
+            virtual void release(){};
+
+            BufferType getBufferType(){return mType;}
+            UINT32 getBufferSize(return uSize;)
+                bool isDynamic(){return bDynamic;}
+
+
+        protected:
+            BufferType mType;
+            UINT32 uSize;
+            ResType mType;
+        };
     }
-    virtual void update(){};
-    virtual void release(){};
-
-    BufferType getBufferType(){return mType;}
-    UINT32 getBufferSize(return uSize;)
-    bool isDynamic(){return bDynamic;}
-
-
-protected:
-    BufferType mType;
-    UINT32 uSize;
-    bool bDynamic;
 }
-
 #endif
 

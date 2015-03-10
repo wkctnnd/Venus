@@ -44,10 +44,11 @@ namespace Venus
 
     enum VertexSemantic
     {
-        POSITION,
-        NORMAL,
-        BINORMAL,
-        TANGENT,
+        SEMANTIC_POSITION,
+        SEMANTIC_TEXCOORD,
+        SEMANTIC_NORMAL,
+        SEMANTIC_BINORMAL,
+        SEMANTIC_TANGENT,
     };
 }
 
