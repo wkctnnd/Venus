@@ -17,8 +17,7 @@ namespace Venus
             virtual void release(){};
 
             BufferType getBufferType(){return mType;}
-            UINT32 getBufferSize(return uSize;)
-                bool isDynamic(){return bDynamic;}
+            //UINT32 getBufferSize(return uSize;)
 
 
         protected:
