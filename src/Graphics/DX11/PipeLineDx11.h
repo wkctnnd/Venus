@@ -8,6 +8,7 @@ namespace Venus
         class PipeLineDx11:public PipeLine
         {
         public:
+            void setInputAssemble(InputAssemble* input);
         }
     }
 }
