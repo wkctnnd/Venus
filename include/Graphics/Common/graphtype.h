@@ -10,18 +10,12 @@ namespace Venus
         Constant_Buffer,
     };
 
-    enum ResGpuUsage
+    enum ResAccess
     {
-        Imutable,
-        Default,
-        Dynamic,
-        Stage
-    };
-
-    enum ResCpuAcess
-    {
-        WriteOnly,
-        ReadOnly
+        GPU_READ = 0x01,
+        GPU_WRITE = 0x02,
+        CPU_READ = 0x04,
+        CPU_WRITE = 0x08,
     };
 
     enum TextureType
@@ -44,16 +38,28 @@ namespace Venus
 
     enum VertexSemantic
     {
-        POSITION,
-        NORMAL,
-        BINORMAL,
-        TANGENT,
+        SEMANTIC_POSITION,
+        SEMANTIC_TEXCOORD,
+        SEMANTIC_NORMAL,
+        SEMANTIC_BINORMAL,
+        SEMANTIC_TANGENT,
     };
 
+<<<<<<< HEAD
     enum  
     {
 
     };
+=======
+    enum AccessFlag
+    {
+        ACCESS_READ,
+        ACCESS_WRITE,
+        ACCESS_READ_WRITE,
+        ACCESS_WRITE_DISCARD,
+        ACCESS_WRITE_NO_OVERWRITE
+    }
+>>>>>>> 11b51b2f2569fea8d874b434fa4183618b39a994
 }
 
 #endif

@@ -6,7 +6,7 @@ namespace Venus
 {
     namespace Graphics
     {
-        TextureDx11::TextureDx11(ID3D11Device* device, TextureInfo &info, Resource::Image* image):mInfo(info)
+        TextureDx11::TextureDx11(ID3D11Device* device, TextureInfo &info, ResAccess access, Resource::Image* image):mInfo(info)
         {
             D3D11_SUBRESOURCE_DATA *data = NULL;
             if (image != NULL)
@@ -33,9 +33,7 @@ namespace Venus
                 }
             }
 
-            D3D11_USAGE usage;
-            D3D11_CPU_ACCESS_FLAG access;
-            getUsageAccess(usage, access);
+            
             switch (mInfo.mType)
             {
             case Texture1D:
@@ -44,8 +42,7 @@ namespace Venus
                     D3D11_TEXTURE1D_DESC desc;
                     desc.ArraySize = mInfo.uArrayNum;
                     desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-                    desc.CPUAccessFlags = access;
-                    desc.Usage = usage;
+                    getUsageAccess(access, desc.Usage, desc.CPUAccessFlags);
                     desc.Width = mInfo.uWidth;
                     desc.Format = ;
                     desc.MipLevels = ;
@@ -62,8 +59,7 @@ namespace Venus
                      D3D11_TEXTURE2D_DESC desc;
                     desc.ArraySize = mInfo.uArrayNum;
                     desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-                    desc.CPUAccessFlags = access;
-                    desc.Usage = usage;
+                    getUsageAccess(access, desc.Usage, desc.CPUAccessFlags);
                     desc.Width =  image->getWidth();
                     desc.Height =  image->getHeight();
                     desc.Format = ;
@@ -79,8 +75,7 @@ namespace Venus
                 {
                     D3D11_TEXTURE3D_DESC desc;
                     desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-                    desc.CPUAccessFlags = access;
-                    desc.Usage = usage;
+                    getUsageAccess(access, desc.Usage, desc.CPUAccessFlags);
                     desc.Width = mInfo.uWidth;
                     desc.Height= mInfo.uHeight;
                     desc.Depth = mInfo.uDepth;
@@ -107,11 +102,42 @@ namespace Venus
             UpdateSubresource(
         }
 
-        void TextureDx11::getUsageAccess(D3D11_USAGE &usage, D3D11_CPU_ACCESS_FLAG &access)
+        void TextureDx11::getUsageAccess(ResAccess access, D3D11_USAGE &usage, UINT& cpuaccess)
         {
-            
+             //gpu read only
+            if (access == GPU_READ)
+            {
+                usage = D3D11_USAGE_IMMUTABLE;
+                cpuaccess = 0;
+            }
+            //gpu can write, no cpu access
+            else if((access & GPU_WRITE !=0) && (access & (CPU_READ|CPU_WRITE) ==0))
+            {
+                usage = D3D11_USAGE_DEFAULT;
+                cpuaccess = 0;
+            }
+
+            else if((access & GPU_WRITE|GPU_READ != 0))
+            {
+                if(access & (CPU_READ | CPU_WRITE) != 0)
+                {
+                    usage = D3D11_USAGE_STAGING;
+                    cpuaccess = (D3D11_CPU_ACCESS_READ | D3D10_CPU_ACCESS_WRITE);
+                }
+
+                else if(access & CPU_READ)
+                {
+                    usage = D3D11_USAGE_STAGING;
+                    cpuaccess = D3D11_CPU_ACCESS_READ;
+                }
+
+                else
+                {
+                    usage = D3D11_USAGE_DYNAMIC;
+                    cpuaccess = D3D11_CPU_ACCESS_WRITE;
+                }
         }
-
-
+          
+        }
     }
 }
