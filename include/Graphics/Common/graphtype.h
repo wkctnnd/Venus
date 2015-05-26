@@ -49,6 +49,11 @@ namespace Venus
         BINORMAL,
         TANGENT,
     };
+
+    enum  
+    {
+
+    };
 }
 
 #endif
