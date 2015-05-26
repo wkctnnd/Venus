@@ -38,19 +38,14 @@ namespace Venus
 
     enum VertexSemantic
     {
-        SEMANTIC_POSITION,
+        SEMANTIC_POSITION = 0,
         SEMANTIC_TEXCOORD,
         SEMANTIC_NORMAL,
         SEMANTIC_BINORMAL,
         SEMANTIC_TANGENT,
     };
 
-<<<<<<< HEAD
-    enum  
-    {
 
-    };
-=======
     enum AccessFlag
     {
         ACCESS_READ,
@@ -59,7 +54,7 @@ namespace Venus
         ACCESS_WRITE_DISCARD,
         ACCESS_WRITE_NO_OVERWRITE
     }
->>>>>>> 11b51b2f2569fea8d874b434fa4183618b39a994
+
 }
 
 #endif
