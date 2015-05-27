@@ -15,12 +15,15 @@ namespace Venus
         void loadFromFile(Utility::VString file);
 
     private:
-        Utility::VVector<float> mPosition; 
-        Utility::VVector<int> mIndex;
-        Utility::VVector<float> mTexcoord;
-        Utility::VVector<float> mNormal;
-        Utility::VVector<float> mTangent;
+        f32* mPosition; 
+        f32* mTexcoord;
+        f32* mColor;
+
+
+        Utility::VVector<f32*> mTangent;
+        Utility::VVector<f32> mNormal;
+        Utility::VVector<f32> mBNormal;
+        
     };
-    }
 }
 #endif

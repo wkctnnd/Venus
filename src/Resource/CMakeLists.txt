@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 2.8)
 ADD_SUBDIRECTORY(Image Image)
 
 INCLUDE_DIRECTORIES(${VenusInc}/Resource)
+INCLUDE_DIRECTORIES(${VenusInc}/Utility)
 
 FILE(GLOB_RECURSE FILE_SOURCE ./*.cpp)
 FILE(GLOB_RECURSE FILE_HEADER ./*.h)
