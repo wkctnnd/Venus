@@ -7,8 +7,8 @@ namespace Venus
         class BaseMaterial
         {
         public:
-
-
+            void saveToFile(Utility::VString file);
+            void loadFromFile(Utility::VString file);
         private:
             Utility::VString mDiffTexture;
             Utility::VString mSpecTexture;

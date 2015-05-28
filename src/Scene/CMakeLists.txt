@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 INCLUDE_DIRECTORIES(${VenusInc}/Scene)
+INCLUDE_DIRECTORIES(${VenusInc}/Container)
 
  
 FILE(GLOB_RECURSE SCENE_SOURCE ${VenusSrc}/Scene/*.cpp)

@@ -33,12 +33,12 @@ namespace Venus
         };
 
         template<class T>
-        class VVector
+        class VMap
         {
             public:
                 typedef VVectorIterator Iterator;
 
-                VVector();
+                VMap();
                 VVector(size_t size);
 
                 void push_back(T &element);

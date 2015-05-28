@@ -3,9 +3,7 @@
 
 class SceneObject
 {
-    int getID(){return iObjectID;}
-private:
-    int iObjectID:
+    
 }
 
 #endif
