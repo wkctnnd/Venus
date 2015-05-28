@@ -1,6 +1,7 @@
 #ifndef RENDERENGINE_H
 #define RENDERENGINE_H
 //most top level of rendering 
+#include "Container/vector.h"
 namespace Venus
 {
     namespace Graphics
@@ -8,18 +9,14 @@ namespace Venus
         class Device;
         class Context;
     }
-    class RenderEngine
+    class RenderMesh
     {
     public:
-        RenderEngine();
-        ~RenderEngine();
-        void createWindow();
-        Graphics::Device* getDevice();
-        Graphics::Context* getContext();
-        void init();
-        void unInit();
+        RenderMesh();
+        ~RenderMesh();
+       
     private:
-        
+        Utility::VVector<Graphics*> mbuffer;
     };
 
     static RenderEngine engine;

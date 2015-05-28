@@ -33,7 +33,7 @@ namespace Venus
         };
 
         template<class T>
-        class VMap
+        class VVector
         {
             public:
                 typedef VVectorIterator Iterator;

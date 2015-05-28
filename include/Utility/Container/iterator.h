@@ -17,8 +17,8 @@ namespace Venus
                 virtual bool operator == (Random_Iterator&) =  0;
                 virtual bool operator < (Random_Iterator&) = 0;
                 virtual bool operator <= (Random_Iterator&) = 0;
-                virtual Random_Iterator& operator + (Random_Iterator&);
-                virtual Random_Iterator& operator - (Random_Iterator&);
+                virtual Random_Iterator& operator + (int);
+                virtual Random_Iterator& operator - (int);
         };
 
         template<class T>
@@ -30,7 +30,21 @@ namespace Venus
         template<class T>
         class Bidirection_Iterator
         {
-        
+        public:
+            virtual T* operator ->() = 0;
+            virtual Random_Iterator& operator ++() = 0;
+            virtual Random_Iterator& operator --() = 0;
+            virtual bool operator != (Random_Iterator&) = 0;
+            virtual bool operator == (Random_Iterator&) =  0;
+          
+        };
+
+        template<class T>
+        class Insert_Iterator
+        {
+        public:
+           
+
         };
 
 

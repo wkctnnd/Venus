@@ -2,6 +2,7 @@
 #define SCENENODE_H
 //logical relation among objects' position.
 #include "Container\vector.h"
+#include "Container\map.h"
 class SceneObject;
 namespace Venus
 {
@@ -14,7 +15,7 @@ namespace Venus
             void Detach(int id);
         private:
             Utility::VVector<SceneObject *> mObjectArray;
-            Utility::
+            Utility::VMap<int, int> mMapping;
         };
 
     }
