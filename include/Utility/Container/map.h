@@ -7,7 +7,7 @@ namespace Venus
     namespace Utility
     {
         template<class T>
-        class VMapIterator :public Random_Iterator
+        class VMapIterator :public Bidirection_Iterator
         {
             friend VVectorIterator;
         public:
@@ -19,12 +19,6 @@ namespace Venus
             virtual Random_Iterator& operator --();
             virtual bool operator !=(Random_Iterator& i);
             virtual bool operator ==(Random_Iterator& i);
-            virtual bool operator < (Random_Iterator&);
-            virtual bool operator <= (Random_Iterator&);
-            virtual T& getAt(size_t i);
-
-            virtual Random_Iterator operator + (size_t);
-            virtual Random_Iterator operator - (size_t);
 
 
         private:
@@ -37,33 +31,28 @@ namespace Venus
          class Pair
          {
          public:
+
+             Pair(T t, V v){mFirst = t; mSecond = v;}
             T mFirst;
             V mSecond;
          };
-         template<class T, class V>
-         Pair Make_Pair_Of(T t, V v)
-         {
-            Pair p;
-            p.mFirst = t;
-            p.mSecond = v;
-         }
-
+     
         template<class T, class V>
         class VMap
         {
         public:
-            typedef VVectorIterator Iterator;
+            typedef VMapIterator Iterator;
 
             VMap();
             VMap(size_t size);
 
-            void insert(Pair &p);
+            VMapIterator insert(Pair &p);
             void delete(T t);
             void clear();
             void resize(size_t size);
             T& getAt(size_t i);
-          //  VVectorIterator& begin();
-          //  VVectorIterator& end();
+            VMapIterator begin();
+           VMapIterator end();
 
             V& operator [](T t);
         private:
@@ -76,6 +65,7 @@ namespace Venus
                 value *vRight;
             };
             value* vHead;
+            value *vEnd;
         };
 
 

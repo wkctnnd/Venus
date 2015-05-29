@@ -45,8 +45,8 @@ namespace Venus
                 void clear();
                 void resize(size_t size);
                 T& getAt(size_t i);
-                VVectorIterator& begin();
-                VVectorIterator& end();
+                VVectorIterator begin();
+                VVectorIterator end();
         private:
 
             T* mPointer;
