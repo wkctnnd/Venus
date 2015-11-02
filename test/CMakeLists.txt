@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 2.8)
+ADD_SUBDIRECTORY(UtilityTest UtilityTest)
+
+INCLUDE_DIRECTORIES(${VenusInc}/Utility)
+
+FILE(GLOB_RECURSE SOURCE_1 *.cpp)
+FILE(GLOB_RECURSE HEADER_1 *.h)
+ADD_EXECUTABLE(UtilityTest ${SOURCE_1} ${HEADER_1})
