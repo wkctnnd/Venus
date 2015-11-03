@@ -1,5 +1,5 @@
-#include "buffer.h"
+#include "file/filemanager.h"
 void main()
 {
-	output();
+	
 }

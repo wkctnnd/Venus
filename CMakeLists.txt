@@ -31,12 +31,11 @@ include(${VenusDir}/globalinclude.txt)
 
 ADD_SUBDIRECTORY(${VenusDir}/src)
 
-
+ADD_SUBDIRECTORY(${VenusDir}/test)
 
 INCLUDE_DIRECTORIES(${VenusInc}/Graphics)
-LINK_DIRECTORIES(${VenusBinary}/lib/debug)
-ADD_EXECUTABLE(test main.cpp)
-target_link_libraries(test DX11)
+#ADD_EXECUTABLE(test main.cpp)
+#target_link_libraries(test DX11)
 
 
 

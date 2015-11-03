@@ -33,7 +33,7 @@ namespace Venus
             else return 0;
         }
 
-        char* VString::getChar()
+        const char* VString::getChar()
         {
             return cStr;
         }
@@ -44,17 +44,31 @@ namespace Venus
             return strcmp(cStr, s.getChar());
         }
 
-        uint32 VString::compareCI(VString &s)
+		uint32 VString::compareCI(VString &s)
+		{
+			return strcmp(cStr, s.getChar());
+		}
 
         size_t VString::find(VString &s)
         {
-            
+			return 1;
         }
 
         VString VString::subStr(size_t start, size_t length)
         {
 
-            return;
+            return *this;
         }
+
+		void VString::assign(char* c)
+		{
+			//VAssert(c);
+			if (cStr != 0)
+			{
+				delete cStr;
+			}
+
+			cStr = c;
+		}
     }
 }

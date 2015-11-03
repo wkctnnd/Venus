@@ -6,14 +6,23 @@ namespace Venus
 {
 	namespace Utility
 	{
+
+		VFileManager* VFileManager::getInstance()
+		{
+			if (!m_pInstrance)
+			{
+				m_pInstrance = new VFileManager();
+			}
+			return m_pInstrance;
+		}
 		VFileManager::VFileManager()
 		{
 			
 		}
 
-		bool VFileManager::open(VString file, FileAcess acess)
+		VFile* VFileManager::openFile(VString file, FileAcess acess, FileOpenMode, bool shared, bool asyn)
 		{
-			std::string path;
+		/*	std::string path;
 			std::string name;
 			std::string ext;
 
@@ -36,10 +45,10 @@ namespace Venus
 				{
 					VAssert(name.empty()==0, "unknow file extension");
 				}
-			}
+			}*/
 
-			VAssert(name.empty()==0, "file name wrong");
-			std::string fullpath = path+name+ext;
+			/*VAssert(name.empty()==0, "file name wrong");
+			std::string fullpath = path+name+ext;*/
 
 		}
 

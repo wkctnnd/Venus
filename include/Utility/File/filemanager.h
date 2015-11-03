@@ -20,19 +20,23 @@ namespace Venus
 		class VFileManager
 		{
 		public:
-			VFileManager();
-            ~VFileManager();
-
+			
+			static VFileManager* getInstance();
 
             //create or open file
 			VFile* openFile(VString file, FileAcess acess, FileOpenMode, bool shared = true, bool asyn = false);
-            void unLoadFiles();
+            void   unLoadFiles();
 		private:
-			void spliteFilePath(VString, VString&, VString&, VString&);
-			VString mDefaultpath;
-            VString mMeshPath;
-            VString mShaderPath;
-            VString mAudioPath;
+			//void spliteFilePath(VString, VString&, VString&,  &);
+			//VString mDefaultpath;
+   //         VString mMeshPath;
+   //         VString mShaderPath;
+   //         VString mAudioPath;
+			static VFileManager *m_pInstrance;
+			
+		private:
+			VFileManager();
+			~VFileManager();
 		};
 
 	}

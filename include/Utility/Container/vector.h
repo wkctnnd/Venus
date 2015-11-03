@@ -49,9 +49,9 @@ namespace Venus
                 VVectorIterator end();
         private:
 
-            T* mPointer;
-            size_t sDataSize;
-            size_t sFullSize;
+            T* m_pArray;
+            size_t m_sDataSize;
+            size_t m_sFullSize;
         };
 
 

@@ -14,8 +14,9 @@ namespace Venus
 
             ~VString();
 
+			void assign(char* c);
             size_t length();
-            char* getChar();
+            const char* getChar();
             size_t find(VString &s);
             uint32 compare(VString &s);
             //case-insensitive

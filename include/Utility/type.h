@@ -15,6 +15,8 @@ namespace Venus
     typedef uint32_t uint32 ;
     typedef uint64_t uint64 ;
 
+	typedef bool bool8;
+
     typedef float f32;
     typedef double f64;
 
