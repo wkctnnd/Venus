@@ -2,7 +2,7 @@
 #include "File/file.h"
 #include <assert.h>
 
-#if (defined VENUS_WIN32) || (defined VENUS_WIN32)
+#if (defined VENUS_WIN32) || (defined VENUS_WIN64)
 #include "Win/winfile.h"
 #elif defined VENUS_MAC
 #include "Mac/macfile.h"
@@ -12,7 +12,7 @@ namespace Venus
 {
 	namespace Utility
 	{
-		VFile::VFile(VString& file, FileAcess acess, FileOpenMode mode, bool shared, bool asyn)
+		VFile::VFile(VString& file, FileAcess access, FileOpenMode mode, bool shared, bool asyn)
 		{
 #if (defined VENUS_WIN32) || (defined VENUS_WIN32)
 			implementation = new WinFileImp();
@@ -22,16 +22,22 @@ namespace Venus
 			open(file, access, mode, shared, asyn);
 		}
 
+
 		bool VFile::open(VString &file, FileAcess access, FileOpenMode mode, bool shared, bool asyn)
 		{
-			implementation->open(file, access, mode, shared, asyn);
+			return implementation->open(file, access, mode, shared, asyn);
 		}
 
-        uint32 VFile::synRead(void* p, uint32 size)
+		size_t VFile::getFileSize()
+		{
+			return implementation->
+		}
+
+		size_t VFile::synRead(void* p, uint32 size)
         {
-            implementation->synRead(p, size);
+            return implementation->synRead(p, size);
         }
-		void VFile::close()
+		bool VFile::close()
 		{
 			implementation->close();
 		}

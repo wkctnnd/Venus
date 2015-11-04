@@ -13,9 +13,10 @@ namespace Venus
 		public:
 
 			bool open(VString &file, FileAcess acess, FileOpenMode mode, bool shared, bool asyn);
-			void close();
-			uint32 synRead(void* p, uint32 size);
-			//void asynRead();
+			bool close();
+			size_t getFileSize();
+			size_t synRead(void* p, uint32 size);
+			void asynRead();
 			void seekPosition(int64 offset, VFile::StartPosition pos);
 		private:
 			HANDLE hFile;

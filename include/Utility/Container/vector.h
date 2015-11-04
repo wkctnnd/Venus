@@ -43,7 +43,7 @@ namespace Venus
 
                 void push_back(T &element);
                 void clear();
-                void resize(size_t size);
+                void resize(size_t size, T value = 0);
                 T& getAt(size_t i);
                 VVectorIterator begin();
                 VVectorIterator end();

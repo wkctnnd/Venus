@@ -20,7 +20,7 @@ namespace Venus
 			
 		}
 
-		VFile* VFileManager::openFile(VString file, FileAcess acess, FileOpenMode, bool shared, bool asyn)
+		VFile* VFileManager::openFile(VString filepath, FileAcess acess, FileOpenMode mode, bool shared, bool asyn)
 		{
 		/*	std::string path;
 			std::string name;
@@ -49,17 +49,9 @@ namespace Venus
 
 			/*VAssert(name.empty()==0, "file name wrong");
 			std::string fullpath = path+name+ext;*/
-
+			VFile *file = new VFile(filepath, acess, mode, shared, asyn);
+			return file;
 		}
 
-		void VFile::close()
-		{
-			implementation->close();
-		}
-
-		void VFile::spliteFilePath(VString filepath, VString& path, VString& name, VString& ext)
-		{
-			
-		}
 	}
 }

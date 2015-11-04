@@ -24,7 +24,7 @@ namespace Venus
 			static VFileManager* getInstance();
 
             //create or open file
-			VFile* openFile(VString file, FileAcess acess, FileOpenMode, bool shared = true, bool asyn = false);
+			VFile* openFile(VString file, FileAcess acess = Utility::FileAcess::READ, FileOpenMode = Utility::FileOpenMode::OPEN_EXISTING, bool shared = true, bool asyn = false);
             void   unLoadFiles();
 		private:
 			//void spliteFilePath(VString, VString&, VString&,  &);

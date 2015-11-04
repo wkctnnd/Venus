@@ -1,5 +1,6 @@
 #include "Container\vector.h"
 #include "assert.h"
+#include "stdlib.h"
 namespace Venus
 {
     namespace Utility
@@ -103,8 +104,13 @@ namespace Venus
 			{
 				m_pArray[m_sDataSize] = element;
 			}
-			else 
+			else
 			{
+				m_sFullSize = 2 * m_sFullSize;
+				m_pArray = realloc(m_pArray, m_sFullSize);
+				m_pArray[m_sDataSize] = element;
+				m_sDataSize++;
+			}
         }
 
 
@@ -115,9 +121,11 @@ namespace Venus
         }
 
         template<class T>
-        void VVector<T>::resize()
+		void VVector<T>::resize(size_t size, T value /* = 0 */)
         {
-
+		/*	if (size)
+			{
+			}*/
         }
 
 

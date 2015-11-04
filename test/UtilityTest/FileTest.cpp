@@ -1,37 +1,53 @@
-#include "BaseTest.h"
+#include "FileTest.h"
+#include "File/file.h"
 namespace Venus
 {
 	namespace Test
 	{
-		void BaseTest::OnTest(std::function<void(TestInfo&)> showtest)
+		FileTest::FileTest()
 		{
-			for (auto it = m_Tests.begin(); it != m_Tests.end();++it)
-			{
-				TestInfo info;
-				try
-				{
-					bool8 result = (*it)(info);
-					if (info.m_bIsWantException)
-					{
-						info.m_bIsOK = false;
-					}
-					else
-					{
-						info.m_bIsOK = result;
-					}
-				}
-				catch (...)
-				{
-					if (info.m_bIsWantException)
-					{
-						info.m_bIsOK = true;
-					}
-				}
-
-				showtest(info);
-			}
-
+			TESTFUN_INIT(FileTest::OpenFile);
+			TESTFUN_INIT(FileTest::CloseFile);
+			TESTFUN_INIT(FileTest::SynReadFile);
 			
+			m_pFileManager = Utility::VFileManager::getInstance();
+		}
+
+		bool FileTest::OpenFile(TestInfo& info)
+		{
+			TEST_INIT(info, "open file");
+			//bool res = true;
+			Utility::VFile *file1 = m_pFileManager->openFile("../../res/test/filetest.txt");
+			if (file1)
+			{
+				return true;
+			}
+				
+			else return false;
+			
+		}
+
+		bool FileTest::CloseFile(TestInfo& info)
+		{
+			TEST_INIT(info, "close file");
+
+			Utility::VFile *file1 = m_pFileManager->openFile("../../res/test/filetest.txt");
+			return file1->close();
+		}
+
+		bool FileTest::SynReadFile(TestInfo& info)
+		{
+			TEST_INIT(info, "Syn read file");
+
+			Utility::VFile *file1 = m_pFileManager->openFile("../../res/test/filetest.txt");
+			size_t size = file1->getFileSize();
+			char *buffer = new char[size];
+			size_t read = file1->synRead(buffer, size);
+			if (read == size)
+			{
+				return true;
+			}
+			else return false;
 		}
 	}
 }

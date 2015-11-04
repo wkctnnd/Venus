@@ -13,24 +13,38 @@ namespace Venus
             if (shared)
               sharemode = FILE_SHARE_DELETE|FILE_SHARE_READ|FILE_SHARE_WRITE;
 			hFile = CreateFile(file.getChar(),accessmode[access],sharemode, 0, createmode[mode], 0, 0 );
-
+			if (hFile==INVALID_HANDLE_VALUE)
+			{
+				return false;
+			}
+			else return true;
 		}
 
-        uint32 WinFileImp::synRead(void* p, uint32 size)
+		size_t WinFileImp::synRead(void* p, uint32 size)
         {
-            uint32 written;
+			size_t written;
             ReadFile(hFile, p, size, (LPDWORD)(&written), 0);
             return written;
         }
 
-		void WinFileImp::close()
+		size_t WinFileImp::getFileSize()
 		{
-			CloseHandle(hFile);
+			return GetFileSize(hFile, NULL);
+		}
+
+		bool WinFileImp::close()
+		{
+			return CloseHandle(hFile);
 		}
 
         void WinFileImp::seekPosition(int64 offset, VFile::StartPosition pos)
         {
-            SetFilePointer();
+           // SetFilePointer();
         }
+
+		void WinFileImp::asynRead()
+		{
+
+		}
 	}
 }
