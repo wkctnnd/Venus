@@ -6,6 +6,7 @@ namespace Venus
 {
 	namespace Utility
 	{
+		//http://blog.csdn.net/amwihihc/article/details/7481656
          //http://blog.csdn.net/amwihihc/article/details/8813565
 		class Allocator
 		{
@@ -14,21 +15,45 @@ namespace Venus
 			virtual void dellocate(void* p) = 0;
 
             template<class T>
-            T* allocateNew();
+            virtual T* allocateNew();
+
+			template<class T>
+			virtual T* allocateNew();
 
             template<class T>
-            T* allocateNew(T&);
+			virtual T* allocateNew(T&);
 
             template<class T>
-            void dellocateDelete(void* p);
+			virtual void dellocateDelete(void* p);
 
             template<class T>
-            T* allocateNewArray(size_t num);
+			virtual T* allocateNewArray(size_t num);
 
             template<class T>
-            void dellocateDeleteArray();
+			virtual void dellocateDeleteArray(void* p);
 		};
 
+		class SimpleAllocator
+		{
+		public:
+			void *allocate(size_t size, uint8 alignment){}
+			void dellocate(void* p){}
+
+			template<class T>
+			virtual T* allocateNew();
+
+			template<class T>
+			virtual T* allocateNew(T&);
+
+			template<class T>
+			virtual void dellocateDelete(void* p);
+
+			template<class T>
+			virtual T* allocateNewArray(size_t num);
+
+			template<class T>
+			virtual void dellocateDeleteArray(void* p);
+		};
 		
 
 

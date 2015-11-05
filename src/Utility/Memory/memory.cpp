@@ -67,6 +67,41 @@ namespace Venus
 
 		}
 
+		template<class T>
+		T* SimpleAllocator::allocateNew()
+		{
+			T *p = new T();
+			return p;
+		}
+
+		template<class T>
+		T* allocateNew(T& t)
+		{
+			T *p = new T(t);
+			VAssert(p != NULL, "bad allocate");
+			return p;
+		}
+
+		template<class T>
+		void dellocateDelete(void* p)
+		{
+			delete p;
+		}
+
+		template<class T>
+		T* allocateNewArray(size_t num)
+		{
+			T *p = new T[num];
+			VAssert(p != NULL, "bad allocate");
+			return p;
+		}
+
+		template<class T>
+		void dellocateDeleteArray(void* p)
+		{
+			delete[] p;
+		}
+
 		DynamicPoolAllocator::DynamicPoolAllocator(uint32 size = 8)
 		{
 			if(size > 8)
@@ -142,7 +177,7 @@ namespace Venus
 
 		void Venus_delete(void *pointer, uint32 size, Allocator *allocator = 0, uint8 alignment = ALIGN4)
 		{
-			allocator->dellocate(pointer, size, alignment);
+			allocator->dellocate->(pointer, size, alignment);
 		}
 	}
 }
