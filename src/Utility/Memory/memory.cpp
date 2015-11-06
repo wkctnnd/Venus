@@ -7,22 +7,14 @@ namespace Venus
 	namespace Utility
 	{
 		template<class T, class ... param>
-		T* Allocator::allocateNew(... param)
+		T* Allocator::allocateNew(param... t)
 		{
 			void* p = allocate(sizeof(T), _ALIGN_OF(T));
 			VAssert(p != NULL, "bad allocate");
-			return new(p) T(param...);
+			return new(p) T(t);
 		}
 
 		template<class T>
-		T* Allocator::allocateNew()
-		{
-			void* p = allocate(sizeof(T), _ALIGN_OF(T));
-			VAssert(p != NULL, "bad allocate");
-			return new(p)T;
-		}
-
-		template<class T, class ... param>
 		T* Allocator::allocateNew(T& t)
 		{
 			void *p = allocate(sizeof(T), _ALIGN_OF(T));
@@ -76,10 +68,10 @@ namespace Venus
 
 		}
 
-		template<class T>
-		T* SimpleAllocator::allocateNew()
+		template<class T, class ... param>
+		T* SimpleAllocator::allocateNew(param... t)
 		{
-			T *p = new T();
+			T *p = new T(p);
 			return p;
 		}
 
@@ -186,7 +178,7 @@ namespace Venus
 
 		void Venus_delete(void *pointer, uint32 size, Allocator *allocator = 0, uint8 alignment = ALIGN4)
 		{
-			allocator->dellocate->(pointer, size, alignment);
+			allocator->dellocate(pointer, size, alignment);
 		}
 		
 	}
