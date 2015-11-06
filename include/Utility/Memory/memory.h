@@ -14,7 +14,7 @@ namespace Venus
 			virtual void *allocate(size_t size, uint8 alignment) = 0;
 			virtual void dellocate(void* p) = 0;
 
-            template<class T>
+			template<class T, class... param >
             virtual T* allocateNew();
 
 			template<class T>
@@ -92,7 +92,7 @@ namespace Venus
 
 			void defragment();
 
-			void dellocate(void* p);
+			void dellocate(void* p, uint32 size, uint8 alignment);
 
 		};
 

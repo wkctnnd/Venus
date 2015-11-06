@@ -1,19 +1,28 @@
 #include "Memory/memory.h"
 #include<stdlib.h>
 #include "assert.h"
+#define specialnew(buffer, classtype, param) new (buffer) classtype param
 namespace Venus
 {
 	namespace Utility
 	{
+		template<class T, class ... param>
+		T* Allocator::allocateNew(... param)
+		{
+			void* p = allocate(sizeof(T), _ALIGN_OF(T));
+			VAssert(p != NULL, "bad allocate");
+			return new(p) T(param...);
+		}
+
 		template<class T>
 		T* Allocator::allocateNew()
 		{
 			void* p = allocate(sizeof(T), _ALIGN_OF(T));
 			VAssert(p != NULL, "bad allocate");
-			return new(p) T;
+			return new(p)T;
 		}
 
-		template<class T>
+		template<class T, class ... param>
 		T* Allocator::allocateNew(T& t)
 		{
 			void *p = allocate(sizeof(T), _ALIGN_OF(T));
@@ -179,5 +188,6 @@ namespace Venus
 		{
 			allocator->dellocate->(pointer, size, alignment);
 		}
+		
 	}
 }

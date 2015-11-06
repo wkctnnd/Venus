@@ -1,8 +1,9 @@
 #ifndef FILE_H
 #define FILE_H
-
+#include <memory>
 #include "Container/string.h"
 #include "utilenum.h"
+#include <string>
 namespace Venus
 {
 	namespace Utility
@@ -24,7 +25,7 @@ namespace Venus
 			VFile(VString& file, FileAcess acess = READ, FileOpenMode mode = OPEN_EXISTING, bool shared = true, bool asyn = false);
 			
 			bool close();
-
+	
 			size_t getFileSize();
 			size_t synRead(void* p, uint32 size);
 			void synWrite();

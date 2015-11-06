@@ -19,7 +19,7 @@ namespace Venus
         exit(0);
     }
 
-#define VAssert(exp1, exp2)   (exp1) || (_assert(exp1,__FILE__, __LINE__), 0) 
+#define VAssert(exp1, exp2)   (exp1) || (_assert(#exp1,__FILE__, __LINE__), 0) 
 }
 
 
