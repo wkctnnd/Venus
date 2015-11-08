@@ -46,26 +46,33 @@ namespace Venus
             VMap();
             VMap(size_t size);
 
-            VMapIterator insert(Pair &p);
+            VMapIterator<element> insert(Pair &p);
             void delete(T t);
             void clear();
             void resize(size_t size);
             T& getAt(size_t i);
             VMapIterator begin();
            VMapIterator end();
+           bool isEmpty();
+           void adjust(element* node)
 
             V& operator [](T t);
         private:
-            struct  value
+            struct  element
             {
-                int iKey;
+                element(key, value):mKey(key),mValue(value),vLeft(0),vRight(0){}
+                element(){}
+                T mKey;
                 V mValue;
+                int priority;
 
-                value *vLeft;
-                value *vRight;
+                value *pLeft;
+                value *pRight;
+                value *pPrev;
             };
-            value* vHead;
-            value *vEnd;
+            element* mHead;
+            element* mEnd;
+            unsigned int uSize;
         };
 
 

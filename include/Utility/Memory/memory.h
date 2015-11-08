@@ -1,4 +1,5 @@
 #include"../type.h"
+#include "../../Architecture/singleton.h"
 #define ALIGN16 16
 #define ALIGN8 8
 #define ALIGN4 4
@@ -8,6 +9,17 @@ namespace Venus
 	{
 		//http://blog.csdn.net/amwihihc/article/details/7481656
          //http://blog.csdn.net/amwihihc/article/details/8813565
+		//http://www.swedishcoding.com/2008/08/31/are-we-out-of-memory/
+
+		enum AllocatorType
+		{
+			SIMPLE_TYPE = 0,
+			STACK_TYPE,
+			POOL_TYPE,
+			BLOCK_TYPE,
+			TYPE_NUM
+		};
+
 		class Allocator
 		{
 		public:
@@ -16,9 +28,6 @@ namespace Venus
 
 			template<class T, class... param >
             virtual T* allocateNew();
-
-			template<class T>
-			virtual T* allocateNew();
 
             template<class T>
 			virtual T* allocateNew(T&);
@@ -32,6 +41,9 @@ namespace Venus
             template<class T>
 			virtual void dellocateDeleteArray(void* p);
 		};
+
+
+
 
 		class SimpleAllocator
 		{
@@ -53,11 +65,26 @@ namespace Venus
 
 			template<class T>
 			virtual void dellocateDeleteArray(void* p);
+		private:
+			SimpleAllocator(){};
 		};
 		
 
 
-        class StackAllocator:public Allocator
+
+		//for single frame temp value
+		class LinearAllocator :public Allocator,SingleTon<LinearAllocator>
+		{
+		private:
+			
+		};
+
+
+
+
+
+
+        class StackAllocator:public Allocator,SingleTon<StackAllocator>
         {
         public:
             struct Header
@@ -71,10 +98,13 @@ namespace Venus
         private:
             size_t sCurPosition;
             size_t sLength;
+		private:
+			/*StackAllocator(){}*/
+			//static StackAllocator * m_pAllocator;
         };
 
 
-		class DynamicPoolAllocator:public Allocator
+		class DynamicPoolAllocator:public Allocator,SingleTon<DynamicPoolAllocator>
 		{
 		private:
 			struct freeblock
@@ -92,18 +122,21 @@ namespace Venus
 
 			void defragment();
 
-			void dellocate(void* p, uint32 size, uint8 alignment);
+			void dellocate(void* p);
+	
+	/*	private:
+			DynamicPoolAllocator(){}*/
 
 		};
 
-
+		
 
 
 
 		//block size is byte unit
         //best for list not support for random access
 		template <int blocksize>
-		class FixBlockAllocator:public Allocator
+		class FixBlockAllocator:public Allocator,SingleTon<FixBlockAllocator>
 		{ 
 			void *header;
 			unsigned int blockcount;
@@ -114,7 +147,7 @@ namespace Venus
 
 
 		void* Venus_new( uint32 size, Allocator *allocator = 0, uint8 alignment = ALIGN4);
-		void Venus_delete(void *pointer, uint32 size, Allocator *allocator = 0, uint8 alignment = ALIGN4);
+		void Venus_delete(void *pointer);
 		
 	}
 }

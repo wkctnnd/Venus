@@ -68,6 +68,9 @@ namespace Venus
 
 		}
 
+		//////////////////////////////////////////////////////////////////////////
+		//simpleallocator
+		//////////////////////////////////////////////////////////////////////////
 		template<class T, class ... param>
 		T* SimpleAllocator::allocateNew(param... t)
 		{
@@ -76,7 +79,7 @@ namespace Venus
 		}
 
 		template<class T>
-		T* allocateNew(T& t)
+		T* SimpleAllocator::allocateNew(T& t)
 		{
 			T *p = new T(t);
 			VAssert(p != NULL, "bad allocate");
@@ -84,13 +87,13 @@ namespace Venus
 		}
 
 		template<class T>
-		void dellocateDelete(void* p)
+		void SimpleAllocator::dellocateDelete(void* p)
 		{
 			delete p;
 		}
 
 		template<class T>
-		T* allocateNewArray(size_t num)
+		T* SimpleAllocator::allocateNewArray(size_t num)
 		{
 			T *p = new T[num];
 			VAssert(p != NULL, "bad allocate");
@@ -98,11 +101,26 @@ namespace Venus
 		}
 
 		template<class T>
-		void dellocateDeleteArray(void* p)
+		void SimpleAllocator::dellocateDeleteArray(void* p)
 		{
 			delete[] p;
 		}
 
+		//////////////////////////////////////////////////////////////////////////
+		//linearallocator
+		//////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+		//////////////////////////////////////////////////////////////////////////
+		//dynamicpool
+		//////////////////////////////////////////////////////////////////////////
 		DynamicPoolAllocator::DynamicPoolAllocator(uint32 size = 8)
 		{
 			if(size > 8)
@@ -171,6 +189,12 @@ namespace Venus
 			mFreeList = block;
 		}
 
+
+
+
+
+
+#ifdef CUSTOMALLOCATOR
 		void* Venus_new( uint32 size, Allocator *allocator = 0, uint8 alignment = ALIGN4)
 		{
 			allocator->allocate(size, alignment);
@@ -178,8 +202,23 @@ namespace Venus
 
 		void Venus_delete(void *pointer, uint32 size, Allocator *allocator = 0, uint8 alignment = ALIGN4)
 		{
-			allocator->dellocate(pointer, size, alignment);
+			allocator->dellocate(pointer);
 		}
+
+#else
+		void* Venus_new(uint32 size, Allocator *allocator = 0, uint8 alignment = ALIGN4)
+		{
+			allocator->allocate(size, alignment);
+		}
+
+		void Venus_delete(void *pointer, uint32 size, Allocator *allocator = 0, uint8 alignment = ALIGN4)
+		{
+			allocator->dellocate(pointer);
+		}
+#endif // CUSTOMALLOCATOR
+		
+		
+
 		
 	}
 }
