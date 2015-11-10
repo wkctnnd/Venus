@@ -23,11 +23,10 @@ namespace Venus
 		class Allocator
 		{
 		public:
-			virtual void *allocate(size_t size, uint8 alignment) = 0;
-			virtual void dellocate(void* p) = 0;
+
 
 			template<class T, class... param >
-            virtual T* allocateNew();
+			virtual T* allocateNew(param... t);
 
             template<class T>
 			virtual T* allocateNew(T&);
@@ -40,19 +39,20 @@ namespace Venus
 
             template<class T>
 			virtual void dellocateDeleteArray(void* p);
+
+		protected:
+			virtual void *allocate(size_t size, uint8 alignment) = 0;
+			virtual void dellocate(void* p) = 0;
 		};
 
 
 
 
-		class SimpleAllocator
+		class SimpleAllocator:public Allocator, public SingleTon<SimpleAllocator>
 		{
 		public:
-			void *allocate(size_t size, uint8 alignment){}
-			void dellocate(void* p){}
-
-			template<class T>
-			virtual T* allocateNew();
+			template<class T, class ... param>
+			virtual T* allocateNew(param... t);
 
 			template<class T>
 			virtual T* allocateNew(T&);
@@ -65,6 +65,10 @@ namespace Venus
 
 			template<class T>
 			virtual void dellocateDeleteArray(void* p);
+
+		protected:
+			void *allocate(size_t size, uint8 alignment){}
+			void dellocate(void* p){}
 		private:
 			SimpleAllocator(){};
 		};
@@ -73,7 +77,7 @@ namespace Venus
 
 
 		//for single frame temp value
-		class LinearAllocator :public Allocator,SingleTon<LinearAllocator>
+		class LinearAllocator :public Allocator, public SingleTon<LinearAllocator>
 		{
 		private:
 			
@@ -84,7 +88,7 @@ namespace Venus
 
 
 
-        class StackAllocator:public Allocator,SingleTon<StackAllocator>
+		class StackAllocator :public Allocator, public SingleTon<StackAllocator>
         {
         public:
             struct Header
@@ -104,7 +108,7 @@ namespace Venus
         };
 
 
-		class DynamicPoolAllocator:public Allocator,SingleTon<DynamicPoolAllocator>
+		class DynamicPoolAllocator :public Allocator, public SingleTon<DynamicPoolAllocator>
 		{
 		private:
 			struct freeblock
@@ -136,7 +140,7 @@ namespace Venus
 		//block size is byte unit
         //best for list not support for random access
 		template <int blocksize>
-		class FixBlockAllocator:public Allocator,SingleTon<FixBlockAllocator>
+		class FixBlockAllocator :public Allocator, public SingleTon<FixBlockAllocator>
 		{ 
 			void *header;
 			unsigned int blockcount;

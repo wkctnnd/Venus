@@ -15,7 +15,7 @@ namespace Venus
 		}
 
 		template<class T>
-		T* Allocator::allocateNew(T& t)
+		T** Allocator::allocateNew(T& t)
 		{
 			void *p = allocate(sizeof(T), _ALIGN_OF(T));
 			VAssert(p != NULL, "bad allocate");
@@ -23,7 +23,7 @@ namespace Venus
 		}
 
 		template<class T>
-		T* Allocator::allcateNewArray(size_t num)
+		T** Allocator::allcateNewArray(size_t num)
 		{
 			size_t head = sizeof(size_t) / sizeof(T) + 1;
 			void* p = allocate((sizeof(T) + head) * num, _ALIGN_OF(T));
@@ -95,7 +95,7 @@ namespace Venus
 		template<class T>
 		T* SimpleAllocator::allocateNewArray(size_t num)
 		{
-			T *p = new T[num];
+			T **p = new T[num];
 			VAssert(p != NULL, "bad allocate");
 			return p;
 		}
@@ -179,14 +179,14 @@ namespace Venus
 
 		}
 
-		void DynamicPoolAllocator::dellocate(void* pointer, uint32 size, uint8 alignment)
+		void DynamicPoolAllocator::dellocate(void* pointer)
 		{
-			VAssert(pointer != NULL, "");
-			uint8 adjust = ((uint8*)pointer)[-1];
-			freeblock* block = (freeblock *)((size_t)pointer - adjust);
-			block->mNext = (freeblock* )mFreeList;
-			block->msize = size + alignment;
-			mFreeList = block;
+			//VAssert(pointer != NULL, "");
+			//uint8 adjust = ((uint8*)pointer)[-1];
+			//freeblock* block = (freeblock *)((size_t)pointer - adjust);
+			//block->mNext = (freeblock* )mFreeList;
+			//block->msize = size + alignment;
+			//mFreeList = block;
 		}
 
 
@@ -200,7 +200,7 @@ namespace Venus
 			allocator->allocate(size, alignment);
 		}
 
-		void Venus_delete(void *pointer, uint32 size, Allocator *allocator = 0, uint8 alignment = ALIGN4)
+		void Venus_delete(void *pointer)
 		{
 			allocator->dellocate(pointer);
 		}
@@ -208,11 +208,13 @@ namespace Venus
 #else
 		void* Venus_new(uint32 size, Allocator *allocator = 0, uint8 alignment = ALIGN4)
 		{
+			Allocator *allocator = SimpleAllocator::getInstance();
 			allocator->allocate(size, alignment);
 		}
 
-		void Venus_delete(void *pointer, uint32 size, Allocator *allocator = 0, uint8 alignment = ALIGN4)
+		void Venus_delete(void *pointer)
 		{
+			Allocator *allocator = SimpleAllocator::getInstance();
 			allocator->dellocate(pointer);
 		}
 #endif // CUSTOMALLOCATOR
