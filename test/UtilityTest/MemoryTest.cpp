@@ -20,7 +20,8 @@ namespace Venus
 			m_pString = allocator->allocateNew<std::string>();
 			m_pTestA = allocator->allocateNew<testA>(1,3.0,std::string("c"));
 
-			m_pIntArray = allocator
+			m_pIntArray = allocator->allocateNewArray<int>(10);
+
 			return true;
 		}
 
