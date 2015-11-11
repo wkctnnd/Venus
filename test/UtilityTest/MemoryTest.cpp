@@ -14,38 +14,51 @@ namespace Venus
 		bool MemoryTest::SimpleNewClass(TestInfo& info)
 		{
 			TEST_INIT(info, "simple allocator new");
-			//bool res = true;
-			Utility::Allocator *allocator = Utility::SimpleAllocator::getInstance();
-			m_pInt = allocator->allocateNew<int>();
-			m_pString = allocator->allocateNew<std::string>();
-			m_pTestA = allocator->allocateNew<testA>(1,3.0,std::string("c"));
 
-			m_pIntArray = allocator->allocateNewArray<int>(10);
-
-			return true;
+			bool res = true;
+			Utility::Allocator *allocator = Utility::SimpleAllocator::getInstance();	
+			try
+			{
+				m_pInt = allocator->allocateNew<int>();
+				if (!m_pInt)  res = false;
+				m_pString = allocator->allocateNew<std::string>();
+				if (!m_pString)  res = false;
+				m_pTestA = allocator->allocateNew<testA>(1, 3.0, std::string("c"));
+				if (!m_pTestA)  res = false;
+				m_pIntArray = allocator->allocateNewArray<int>(10);
+				if (!m_pIntArray)  res = false;
+				m_pTestArray = allocator->allocateNewArray<testA>(10);
+				if (!m_pTestArray)  res = false;
+				m_pStringArray = allocator->allocateNewArray<std::string>(10);
+				if (!m_pStringArray)  res = false;
+			}
+			catch (...)
+			{
+				res = false;
+			}
+			return res;
 		}
 
 		bool MemoryTest::SimpleDeleteClass(TestInfo& info)
 		{
-			TEST_INIT(info, "get string length");
-
-			if (m_sTestString1->length()==6)
+			TEST_INIT(info, "simple allocator delete");
+			Utility::Allocator *allocator = Utility::SimpleAllocator::getInstance();
+			try
 			{
-				return true;
+				allocator->dellocateDelete<int>(m_pInt);
+				allocator->dellocateDelete<testA>(m_pTestA);
+				allocator->dellocateDelete<std::string>(m_pString);
+
+				allocator->dellocateDeleteArray<int>(m_pIntArray);
+				allocator->dellocateDeleteArray<testA>(m_pTestA);
+				allocator->dellocateDeleteArray<std::string>(m_pString);
 			}
-			else return false;
-		}
-
-		bool MemoryTest::GetChar(TestInfo& info)
-		{
-			TEST_INIT(info, "get char");
-
-			const char* a = m_sTestString1->getChar();
-			if (strcmp(a, "Wangkc"))
-				return true;
-			else return false;
+			catch (...)
+			{
+				return false;
+			}
 			
-
+			return true;
 		}
 	}
 }

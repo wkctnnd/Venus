@@ -54,7 +54,7 @@ namespace Venus
             VMapIterator begin();
            VMapIterator end();
            bool isEmpty();
-           void adjust(element* node)
+		 
 
             V& operator [](T t);
         private:
@@ -66,14 +66,19 @@ namespace Venus
                 V mValue;
                 int priority;
 
-                value *pLeft;
-                value *pRight;
-                value *pPrev;
+				element *pLeft;
+				element *pRight;
+				element *pPrev;
             };
             element* mHead;
             element* mEnd;
             unsigned int uSize;
-        };
+
+		private:
+			void adjust(element* node);
+			VMapIterator<element> insert(element *Node, element *root);
+			int getPriority();
+		};
 
 
     }

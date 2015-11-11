@@ -35,7 +35,7 @@ namespace Venus
 			virtual void dellocateDelete(void* p);
 
             template<class T>
-			virtual T* allocateNewArray(size_t num);
+			virtual T** allocateNewArray(size_t num);
 
             template<class T>
 			virtual void dellocateDeleteArray(void* p);
@@ -61,10 +61,10 @@ namespace Venus
 			virtual void dellocateDelete(void* p);
 
 			template<class T>
-			virtual T* allocateNewArray(size_t num);
+			virtual T** allocateNewArray(size_t num);
 
 			template<class T>
-			virtual void dellocateDeleteArray(void* p);
+			virtual void dellocateDeleteArray(void** p);
 
 		protected:
 			void *allocate(size_t size, uint8 alignment){}

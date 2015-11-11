@@ -34,9 +34,9 @@ namespace Venus
 			testA *m_pTestA;
 			std::string *m_pString;
 
-			int *m_pIntArray[10];
-			testA *m_pTestArray[10];
-			std::string *m_pStringArray[10];
+			int **m_pIntArray;
+			testA **m_pTestArray;
+			std::string **m_pStringArray;
 		};
 	}
 }

@@ -11,7 +11,7 @@ namespace Venus
             uSize = 0;
         }
 
-        template<class T, class V>
+    /*    template<class T, class V>
         VMapIterator<element> VMap::insert(Pair &p)
         {
             bool end = true;
@@ -71,7 +71,47 @@ namespace Venus
                 adjust(newNode);
                 return VMapIterator<element>(newNode);
             }
-        }
+        }*/
+
+		template<class T, class V>
+		VMapIterator<element> VMap::insert(Pair &p)
+		{
+			element *newNode = new element(key, value);
+			newNode->pLeft = 0;
+			newNode->pRight = 0;
+			newNode->pprev = 0;
+			newNode->priority = 
+			insert(newNode, mHead);
+		}
+
+		template<class T, class V>
+		VMapIterator<element> VMap::insert(element *Node, element *root)
+		{
+			if (root == 0)
+			{
+				root = Node;
+				return root;
+			}
+
+			else if (Node->mKey < root->mKey)
+			{
+				insert(root, Node->pLeft);
+				adjust(root);
+			}
+
+			else if (Node->mKey > root->mKey)
+			{
+				insert(root, Node->pRight);
+				adjust(root);
+			}
+
+			else if (Node->mKey == root->mKey)
+			{
+				delete Node;
+				return root;
+			}
+		}
+
 
         template<class T, class V>
         VMapIterator<T, V> VMap::begin()
@@ -93,25 +133,38 @@ namespace Venus
             return uSize==0;
         }
 
+		template<class T, class V>
+		bool VMap::getPriority()
+		{
+			
+		}
+
         template<class T, class V>
         void VMap::adjust(element* node)
         {
-            element *adjust = node;
-            element *pre = adjust->pPrev;
-            while (true)
-            {
-                if (adjust == pre->pLeft)
-                {
-                    if(adjust->mKey > pre->mKey)
-                    {
+			element *parent = node->pPrev;
+			
+			if (parent->pLeft->mKey > parent->mKey)
+			{
+				element *adjustnode = parent->pLeft;
+				element *breaknode = parent->pLeft->pRight;
+				adjustnode->pRight = parent;
+				adjustnode->pPrev = parent->pPrev;
 
-                    }
-                }
-                else
-                {
+				parent->pPrev = adjustnode;
+				parent->pLeft = breaknode;
+			}
 
-                }
-            }
+			else if (parent->pRight->mKey < parent->mKey)
+			{
+				element *adjustnode = parent->pRight;
+				element *breaknode = parent->pLeft->pLeft;
+				adjustnode->pLeft = parent;
+				adjustnode->pPrev = parent->pPrev;
+
+				parent->pPrev = adjustnode;
+				parent->pLeft = breaknode;
+			}
         }
     }
 

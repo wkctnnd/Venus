@@ -93,7 +93,7 @@ namespace Venus
 		}
 
 		template<class T>
-		T* SimpleAllocator::allocateNewArray(size_t num)
+		T** SimpleAllocator::allocateNewArray(size_t num)
 		{
 			T **p = new T[num];
 			VAssert(p != NULL, "bad allocate");
