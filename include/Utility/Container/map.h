@@ -50,7 +50,7 @@ namespace Venus
             void delete(T t);
             void clear();
             void resize(size_t size);
-            T& getAt(size_t i);
+            T& get(T key);
             VMapIterator begin();
            VMapIterator end();
            bool isEmpty();

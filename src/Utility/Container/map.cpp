@@ -80,7 +80,7 @@ namespace Venus
 			newNode->pLeft = 0;
 			newNode->pRight = 0;
 			newNode->pprev = 0;
-			newNode->priority = 
+			newNode->priority = getPriority();
 			insert(newNode, mHead);
 		}
 
@@ -90,7 +90,7 @@ namespace Venus
 			if (root == 0)
 			{
 				root = Node;
-				return root;
+				return *root;
 			}
 
 			else if (Node->mKey < root->mKey)
@@ -108,7 +108,7 @@ namespace Venus
 			else if (Node->mKey == root->mKey)
 			{
 				delete Node;
-				return root;
+				return *root;
 			}
 		}
 
@@ -139,6 +139,8 @@ namespace Venus
 			
 		}
 
+
+
         template<class T, class V>
         void VMap::adjust(element* node)
         {
@@ -163,9 +165,18 @@ namespace Venus
 				adjustnode->pPrev = parent->pPrev;
 
 				parent->pPrev = adjustnode;
-				parent->pLeft = breaknode;
+			    parent->pRight = breaknode;
 			}
         }
+
+		template<class T,class V>
+		T& VMap::get(T key)
+		{
+			re
+		}
+
+
+
     }
 
 }
