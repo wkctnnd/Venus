@@ -81,16 +81,17 @@ namespace Venus
 			newNode->pRight = 0;
 			newNode->pprev = 0;
 			newNode->priority = getPriority();
-			insert(newNode, mHead);
+			element* res = insert(newNode, mHead);
+			return VMapIterator<res>;
 		}
 
 		template<class T, class V>
-		VMapIterator<element> VMap::insert(element *Node, element *root)
+		element* VMap::insert(element *Node, element *root)
 		{
 			if (root == 0)
 			{
 				root = Node;
-				return *root;
+				return root;
 			}
 
 			else if (Node->mKey < root->mKey)
@@ -108,7 +109,7 @@ namespace Venus
 			else if (Node->mKey == root->mKey)
 			{
 				delete Node;
-				return *root;
+				return root;
 			}
 		}
 
@@ -170,12 +171,42 @@ namespace Venus
         }
 
 		template<class T,class V>
-		T& VMap::get(T key)
+		V& VMap::get(T key)
 		{
-			re
+			element* node(key, T());
+			VMapIterator<element> res = insert(mHead, node);
+			return res->mValue;
 		}
 
+		template<class T, class V>
+		V& VMap::operator [](T key)
+		{
+			get(key);
+		}
 
+		template<class T, class V>
+		element* VMap::search(element* node, T key)
+		{
+			if (node)
+			{
+				if (node->mKey == key)
+				{
+					return node;
+				}
+
+				else if (node->mKey < key)
+				{
+					return search(node->pRight, key);
+				}
+				else
+				{
+					return search(node->pLeft, key);
+				}
+			}
+
+			else
+				return mEnd;
+		}
 
     }
 

@@ -50,7 +50,7 @@ namespace Venus
             void delete(T t);
             void clear();
             void resize(size_t size);
-            T& get(T key);
+            V& get(T key);
             VMapIterator begin();
            VMapIterator end();
            bool isEmpty();
@@ -76,8 +76,9 @@ namespace Venus
 
 		private:
 			void adjust(element* node);
-			VMapIterator<element> insert(element *Node, element *root);
+			element* insert(element *Node, element *root);
 			int getPriority();
+			element* search(element* node, T key);
 		};
 
 
