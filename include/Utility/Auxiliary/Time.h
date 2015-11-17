@@ -1,27 +1,32 @@
+#ifndef TIME_H
+#define  TIME_H
 #include "type.h"
-#include <time.h>
+
 namespace Venus
 {
 	namespace Utility
 	{
-		class Time
+		typedef tm CalenderTime;
+		/*struct CalenderTime
 		{
-		public:
-			uint32 ();
-
-		private:
-
-		};
+			uint32 m_uYear;
+			uint32 m_uMonth;
+			uint32 m_uDay;
+			uint32 m_uHour;
+			uint32 m_uMinute;
+			uint32 m_uSecond;
+		};*/
 
 		class Clock
 		{
 		public:
-			Time GetCurrentTime();
-
-
+			int64 getTickTime();
+			CalenderTime getUTCTime();
+			CalenderTime getLocalTime();
 
 		};
 
 
 	}
 }
+#endif

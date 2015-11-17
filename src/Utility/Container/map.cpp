@@ -1,213 +1,215 @@
 #include "Container\map.h"
+#include "Auxiliary\random.h"
+#include "Auxiliary\Time.h"
 namespace Venus
 {
     namespace Utility
     {
-        template<class T, class V>
-        VMap::VMap()
-        {
-            mHead = mEnd = new element();
-            mEnd->pPrev = 0;
-            uSize = 0;
-        }
 
-    /*    template<class T, class V>
-        VMapIterator<element> VMap::insert(Pair &p)
-        {
-            bool end = true;
-            bool left = true;
-            T key = p.mFirst;
-            V value = p.mSecond;
-            element *e = mHead;
-            element *p = e;
-            while (e)
-            {
-                if(key < e->mKey)
-                {
-                    p = e;
-                    e = e->pLeft;
-                    end = false;
-                    left = true;
-                }
-                else if(key > e->mKey)
-                {
-                    p = e;
-                    e = e->pRight;
-                    left = false;
-                }
-                else
-                {
-                    return VMapIterator<element>(e);
-                }
-            }
-
-            if (e == 0)
-            {
-                element *newNode = new element(key, value);
-                newNode->pLeft = 0;
-                newNode->pRight = 0;
-                if (isEmpty())
-                {
-                    mHead = newNode;
-                    newNode->pPrev = 0;
-                }
-                else
-                {
-                    if (left)
-                        p->pLeft = newNode;
-                    else
-                        p->pRight = newNode;
-
-                    newNode->pPrev = p;  
-                    uSize++;
-                }
-
-
-                if (end == true)
-                {
-                    mEnd->pPrev = newNode;
-                }
-
-                adjust(newNode);
-                return VMapIterator<element>(newNode);
-            }
-        }*/
 
 		template<class T, class V>
-		VMapIterator<element> VMap::insert(Pair &p)
+		VMap<T,V>::VMap()
+		{
+			m_pRandom = new BaseRandom();
+			mHead = mEnd = new element();
+			mEnd->pPrev = 0;
+			uSize = 0;
+		}
+	
+		template<class T, class V>
+		void VMap<T,V>::_adjust(element* node)
+		{
+			if (node->pLeft->mKey > node->mKey)
+			{
+				element *adjustnode = node->pLeft;
+				element *breaknode = node->pLeft->pRight;
+				adjustnode->pRight = node;
+				adjustnode->pPrev = node->pPrev;
+				node->pPrev = adjustnode;
+				node->pLeft = breaknode;
+			}
+
+			else if (node->pRight->mKey < node->mKey)
+			{
+				element *adjustnode = node->pRight;
+				element *breaknode = node->pright->pLeft;
+				adjustnode->pLeft = node;
+				adjustnode->pPrev = node->pPrev;
+				node->pPrev = adjustnode;
+				node->pRight = breaknode;
+			}
+		}
+
+		template<class T, class V>
+		VMapIterator<element<T,V>> VMap<T,V>::insert(Pair &p)
 		{
 			element *newNode = new element(key, value);
 			newNode->pLeft = 0;
 			newNode->pRight = 0;
 			newNode->pprev = 0;
 			newNode->priority = getPriority();
-			element* res = insert(newNode, mHead);
+			element* res = _insert(newNode, mHead);
 			return VMapIterator<res>;
 		}
 
 		template<class T, class V>
-		element* VMap::insert(element *Node, element *root)
+		VMapIterator<T, V> VMap<T,V>::begin()
 		{
+			VMapIterator<T, V> iterator(vHead);
+			return iterator;
+		}
+
+		template<class T, class V>
+		VMapIterator<T, V> VMap<T,V>::end()
+		{
+			VMapIterator<T, V> iterator(vEnd);
+			return iterator;
+		}
+
+		template<class T, class V>
+		bool VMap<T,V>::isEmpty()
+		{
+			return uSize == 0;
+		}
+
+		template<class T, class V>
+		int32 VMap<T,V>::_getPriority()
+		{
+			return m_pRandom->getRandom();
+		}
+
+
+		template<class T, class V>
+		V& VMap<T,V>::get(T key)
+		{
+			element* node(key, T());
+			VMapIterator<element> res = _insert(mHead, node);
+			return res->mValue;
+		}
+
+		template<class T, class V>
+		V& VMap<T,V>::operator [](T key)
+		{
+			return get(key);
+		}
+
+		template<class T, class V>
+		void VMap<T,V>::clear()
+		{
+			_clear(mHead);
+		}
+		template<class T, class V>
+		void VMap<T,V>::_clear(element* node)
+		{
+			if (node)
+			{
+				_clear(node->pLeft);
+				_clear(node->pRight);
+				delete node;
+			}
+		}
+
+		template<class T, class V>
+		VMap<T,V>::~VMap()
+		{
+			_clear();
+			delete m_pRandom;
+		}
+
+		template<class T, class V>
+		element<T,V>* VMap<T,V>::_insert(element<T,V> *Node, element<T,V> *root)
+		{
+
+			element<T,V> *res = 0;
 			if (root == 0)
 			{
+				res = Node;
 				root = Node;
-				return root;
 			}
 
 			else if (Node->mKey < root->mKey)
 			{
-				insert(root, Node->pLeft);
-				adjust(root);
+				if (root->pLeft == 0)
+				{
+					root->pLeft = Node;
+					res = Node;
+				}
+				else
+				{
+					res = _insert(Node, root->pLeft);
+				}
+				_adjust(root);
 			}
 
 			else if (Node->mKey > root->mKey)
 			{
-				insert(root, Node->pRight);
-				adjust(root);
+				if (root->pRight == 0)
+				{
+					root->pRight = Node;
+					res = Node;
+				}
+				else
+					res = _insert(root, Node->pRight);
+
+				_adjust(root);
 			}
 
 			else if (Node->mKey == root->mKey)
 			{
 				delete Node;
-				return root;
-			}
-		}
-
-
-        template<class T, class V>
-        VMapIterator<T, V> VMap::begin()
-        {
-            VMapIterator<T, V> iterator(vHead);
-            return iterator;
-        }
-
-        template<class T, class V>
-        VMapIterator<T, V> VMap::end()
-        {
-            VMapIterator<T, V> iterator(vEnd);
-            return iterator;
-        }
-
-        template<class T, class V>
-        bool VMap::isEmpty()
-        {
-            return uSize==0;
-        }
-
-		template<class T, class V>
-		bool VMap::getPriority()
-		{
-			
-		}
-
-
-
-        template<class T, class V>
-        void VMap::adjust(element* node)
-        {
-			element *parent = node->pPrev;
-			
-			if (parent->pLeft->mKey > parent->mKey)
-			{
-				element *adjustnode = parent->pLeft;
-				element *breaknode = parent->pLeft->pRight;
-				adjustnode->pRight = parent;
-				adjustnode->pPrev = parent->pPrev;
-
-				parent->pPrev = adjustnode;
-				parent->pLeft = breaknode;
+				res = root;
 			}
 
-			else if (parent->pRight->mKey < parent->mKey)
-			{
-				element *adjustnode = parent->pRight;
-				element *breaknode = parent->pLeft->pLeft;
-				adjustnode->pLeft = parent;
-				adjustnode->pPrev = parent->pPrev;
+			return res;
 
-				parent->pPrev = adjustnode;
-			    parent->pRight = breaknode;
-			}
-        }
-
-		template<class T,class V>
-		V& VMap::get(T key)
-		{
-			element* node(key, T());
-			VMapIterator<element> res = insert(mHead, node);
-			return res->mValue;
-		}
-
-		template<class T, class V>
-		V& VMap::operator [](T key)
-		{
-			get(key);
-		}
-
-		template<class T, class V>
-		element* VMap::search(element* node, T key)
-		{
-			if (node)
-			{
-				if (node->mKey == key)
-				{
-					return node;
-				}
-
-				else if (node->mKey < key)
-				{
-					return search(node->pRight, key);
-				}
-				else
-				{
-					return search(node->pLeft, key);
-				}
-			}
-
-			else
-				return mEnd;
 		}
 
     }
 
 }
+
+
+
+template<class T, class V>
+element<T, V>* VMap<T, V>::_search(element* node, T key)
+{
+	if (node)
+	{
+		if (node->mKey == key)
+		{
+			return node;
+		}
+
+		else if (node->mKey < key)
+		{
+			return search(node->pRight, key);
+		}
+		else
+		{
+			return search(node->pLeft, key);
+		}
+	}
+
+	else
+		return mEnd;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

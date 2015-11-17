@@ -6,6 +6,7 @@ namespace Venus
 {
     namespace Utility
     {
+		class BaseRandom;
         template<class T>
         class VMapIterator :public Bidirection_Iterator
         {
@@ -41,24 +42,8 @@ namespace Venus
         class VMap
         {
         public:
-            typedef VMapIterator Iterator;
 
-            VMap();
-            VMap(size_t size);
-
-            VMapIterator<element> insert(Pair &p);
-            void delete(T t);
-            void clear();
-            void resize(size_t size);
-            V& get(T key);
-            VMapIterator begin();
-           VMapIterator end();
-           bool isEmpty();
-		 
-
-            V& operator [](T t);
-        private:
-            struct  element
+			struct  element
             {
                 element(key, value):mKey(key),mValue(value),vLeft(0),vRight(0){}
                 element(){}
@@ -70,15 +55,35 @@ namespace Venus
 				element *pRight;
 				element *pPrev;
             };
+            typedef VMapIterator Iterator;
+
+            VMap();
+            VMap(size_t size);
+			~VMap();
+            VMapIterator<element> insert(Pair &p);
+            void delete(T t);
+            void clear();
+
+            V& get(T key);
+            VMapIterator begin();
+           VMapIterator end();
+           bool isEmpty();
+		 
+
+            V& operator [](T t);
+        private:
+            
             element* mHead;
             element* mEnd;
             unsigned int uSize;
 
 		private:
-			void adjust(element* node);
-			element* insert(element *Node, element *root);
-			int getPriority();
-			element* search(element* node, T key);
+			void _adjust(element* node);
+			element* _insert(element *Node, element *root);
+			int32 _getPriority();
+			element* _search(element* node, T key);
+			void _clear(element *node);
+			BaseRandom* m_pRandom;
 		};
 
 
