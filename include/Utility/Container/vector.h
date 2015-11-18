@@ -44,12 +44,14 @@ namespace Venus
                 void push_back(T &element);
 				void push_back(T &&element);
                 void clear();
-                void resize(size_t size, T value = 0);
+                void resize(size_t size, T *value = 0);
+				void reserve(size_t size);
                 T& getAt(size_t i);
                 VVectorIterator begin();
                 VVectorIterator end();
 				size_t getSize();
 				size_t getCapacity();
+				T& operator [] (size_t i);
         private:
 
             T* m_pArray;

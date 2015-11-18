@@ -26,24 +26,61 @@ namespace Venus
 
 		bool VectorTest::AddElement(TestInfo& info)
 		{
-			int a = 3;
-			m_pIntVector->push_back(1);
-			m_pIntVector->push_back(a);
-			for (int32 i = 2; i < 10; i++)
+			TEST_INIT(info, "add elements");
+			try
 			{
-				m_pIntVector->push_back(i);
-			}
+				int a = 3;
+				m_pIntVector->push_back(1);
+				m_pIntVector->push_back(a);
+				for (int32 i = 2; i < 10; i++)
+				{
+					m_pIntVector->push_back(i);
+				}
 
-			m_pTestVector->resize(20);
-			for (int32 i = 0; i < 20; i++)
-			{
+				m_pTestVector->resize(20);
+				for (int32 i = 0; i < 20; i++)
+				{
+					test t;
+					(*m_pTestVector)[i] = t;
+				}
+
+				m_pTestPointerVector->reserve(30);
+				for (int32 i = 0; i < 20; i++)
+				{
+					test* t = new test();
+					(*m_pTestPointerVector)[i] = t;
+				}
 			}
+			catch (...)
+			{
+				return false;
+			}
+			return true;
+			
+		}
+
+		bool VectorTest::GetSizeAndCapacity(TestInfo& info)
+		{
+			TEST_INIT(info, "get vector size and capacity");
+			if (m_pIntVector->getSize() == 10 && m_pIntVector->getCapacity() == 16)
+			{
+				if (m_pTestVector->getSize() == 20 && m_pTestVector->getCapacity() == 20)
+				{
+					if (m_pTestPointerVector->getSize() == 20 && m_pTestPointerVector->getCapacity() == 30)
+					{
+						return true;
+					}
+				}
+			}
+			return false;
 		}
 
 		bool VectorTest::DeleteVector(TestInfo& info)
 		{
-			TEST_INIT(info, "get string length");
-
+			TEST_INIT(info, "delete vector");
+			delete m_pIntVector;
+			delete m_pTestVector;
+			delete m_pTestPointerVector;
 		
 		}
 

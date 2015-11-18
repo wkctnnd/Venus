@@ -141,11 +141,21 @@ namespace Venus
 		}
 
 		template<class T>
-		void VVector<T>::resize(size_t size, T value /* = 0 */)
+		void VVector<T>::resize(size_t size, T *value /* = 0 */)
 		{
 			/*	if (size)
 				{
 				}*/
+		}
+
+		template<class T>
+		void VVector<T>::reserve(size_t size)
+		{
+			if (size > m_sFullSize)
+			{
+				m_pArray = realloc(m_pArray, size);
+				m_sFullSize = size;
+			}
 		}
 
 
@@ -166,12 +176,18 @@ namespace Venus
 		{
 			return m_sFullSize;
 		}
-
+		std::vector.clear()
 		template<class T>
 		VVector::~VVector()
 		{
 			clear();
 			delete m_pArray;
+		}
+
+		template<class T>
+		T& VVector<T>::operator =(size_t i)
+		{
+			return getAt(i);
 		}
 
 		template<class T>

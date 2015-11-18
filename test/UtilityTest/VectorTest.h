@@ -9,7 +9,7 @@ namespace Venus
 
 		struct test
 		{
-			test(){}
+			test(){ param0 = 1; param1 = 2; }
 			f32 param0;
 			bool param1;
 		};
@@ -21,6 +21,7 @@ namespace Venus
 		private:
 			bool CreateVector(TestInfo& info);
 			bool AddElement(TestInfo& info);
+			bool GetSizeAndCapacity(TestInfo& info);
 			bool DeleteVector(TestInfo& info);
 			bool ClearVector(TestInfo& info);
 			bool RemoveElement(TestInfo& info);
