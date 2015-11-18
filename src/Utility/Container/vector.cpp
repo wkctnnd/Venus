@@ -3,103 +3,103 @@
 #include "stdlib.h"
 namespace Venus
 {
-    namespace Utility
-    {
-        template<class T>
-        VVectorIterator<T>::VVectorIterator(T *p):m_pArray(p)
-        {}
+	namespace Utility
+	{
+		template<class T>
+		VVectorIterator<T>::VVectorIterator(T *p) :m_pArray(p)
+		{}
 
-        template<class T>
-        VVectorIterator<T>::VVectorIterator(VVectorIterator &v):m_pArray(v.m_pArray)
-        {}
+		template<class T>
+		VVectorIterator<T>::VVectorIterator(VVectorIterator &v) : m_pArray(v.m_pArray)
+		{}
 
-        template<class T>
-        T* VVectorIterator<T>::operator ->()
-        {
-            return m_pArray;
-        }
-        template<class T>
-        Random_Iterator& VVectorIterator<T>::operator ++()
-        {
-            m_pArray++;
-            return *this;
-        }
+		template<class T>
+		T* VVectorIterator<T>::operator ->()
+		{
+			return m_pArray;
+		}
+		template<class T>
+		Random_Iterator& VVectorIterator<T>::operator ++()
+		{
+			m_pArray++;
+			return *this;
+		}
 
-        template<class T>
-        Random_Iterator& VVectorIterator<T>::operator --()
-        {
-            m_pArray--;
-            return *this;
+		template<class T>
+		Random_Iterator& VVectorIterator<T>::operator --()
+		{
+			m_pArray--;
+			return *this;
 
-        }
-        template<class T>
-        bool VVectorIterator<T>::operator !=(Random_Iterator& i)
-        {
-            return !operator == (i);
-        }
+		}
+		template<class T>
+		bool VVectorIterator<T>::operator !=(Random_Iterator& i)
+		{
+			return !operator == (i);
+		}
 
-        template<class T>
-        bool VVectorIterator<T>::operator ==(Random_Iterator& i)
-        {
-            if(m_pArray == static_cast<VVectorIterator&>(i).m_pArray)   
-                return true;
-            else return false;
+		template<class T>
+		bool VVectorIterator<T>::operator ==(Random_Iterator& i)
+		{
+			if (m_pArray == static_cast<VVectorIterator&>(i).m_pArray)
+				return true;
+			else return false;
 
-        }
+		}
 
-        template<class T>
-        bool VVectorIterator<T>::operator <(Random_Iterator& i)
-        {
-            if(m_pArray < static_cast<VVectorIterator&>(i).m_pArray)   
-                return true;
-            else return false;
+		template<class T>
+		bool VVectorIterator<T>::operator <(Random_Iterator& i)
+		{
+			if (m_pArray < static_cast<VVectorIterator&>(i).m_pArray)
+				return true;
+			else return false;
 
-        }
+		}
 
-        template<class T>
-        bool VVectorIterator<T>::operator <=(Random_Iterator& i)
-        {
-            if(m_pArray <= static_cast<VVectorIterator&>(i).m_pArray)   
-                return true;
-            else return false;
+		template<class T>
+		bool VVectorIterator<T>::operator <=(Random_Iterator& i)
+		{
+			if (m_pArray <= static_cast<VVectorIterator&>(i).m_pArray)
+				return true;
+			else return false;
 
-        }
-        template<class T>
-        Random_Iterator VVectorIterator<T>::operator + (size_t i)
-        {
-            VVectorIterator temp(*this);
-            temp.m_pArray += i;
-            return temp;
-        }
+		}
+		template<class T>
+		Random_Iterator VVectorIterator<T>::operator + (size_t i)
+		{
+			VVectorIterator temp(*this);
+			temp.m_pArray += i;
+			return temp;
+		}
 
-        template<class T>
-        Random_Iterator operator - (size_t i)
-        {
-            VVectorIterator temp(*this);
-            temp.m_pArray -= i;
-            return temp;
-        }
-    
+		template<class T>
+		Random_Iterator operator - (size_t i)
+		{
+			VVectorIterator temp(*this);
+			temp.m_pArray -= i;
+			return temp;
+		}
 
-        template<class T>
-        VVector<T>::VVector()
-        {
+
+		template<class T>
+		VVector<T>::VVector()
+		{
 			m_pArray = 0;
 			m_sDataSize = 0;
 			m_sFullSize = 0;
-        }
+		}
 
-        template<class T>
-        VVector<T>::VVector(size_t size)
-        {
+		template<class T>
+		VVector<T>::VVector(size_t size)
+		{
 			m_pArray = new T[size];
 			m_sDataSize = 0;
 			m_sFullSize = size;
-        }
+		}
 
-        template<class T>
-        void VVector<T>::push_back(T &element)
-        {
+		template<class T>
+		void VVector<T>::push_back(T &element)
+		{
 			if (m_sDataSize + 1 < m_sFullSize)
 			{
 				m_pArray[m_sDataSize] = element;
@@ -111,42 +111,84 @@ namespace Venus
 				m_pArray[m_sDataSize] = element;
 				m_sDataSize++;
 			}
-        }
+		}
 
-
-        template<class T>
-        void VVector<T>::clear()
-        {
-
-        }
-
-        template<class T>
-		void VVector<T>::resize(size_t size, T value /* = 0 */)
-        {
-		/*	if (size)
+		template<class T>
+		void VVector<T>::push_back(T &&element)
+		{
+			if (m_sDataSize + 1 < m_sFullSize)
 			{
-			}*/
-        }
+				m_pArray[m_sDataSize] = element;
+			}
+			else
+			{
+				m_sFullSize = 2 * m_sFullSize;
+				m_pArray = realloc(m_pArray, m_sFullSize);
+				m_pArray[m_sDataSize] = element;
+				m_sDataSize++;
+			}
+		}
 
 
-        template<class T>
-        T& VVector<T>::getAt(size_t i)
-        {
-            return m_pArray[i];
-        }
+		template<class T>
+		void VVector<T>::clear()
+		{
+			for (size_t i = 0; i < m_sDataSize; i++)
+			{
+				m_pArray[i].~T();
+			}
+			m_sDataSize = 0;
+		}
 
-        template<class T>
-        VVectorIterator VVectorIterator<T>::begin()
-        {
-            VVectorIterator<T> iter(m_pArray);
-            return iter;
-        }
-       
+		template<class T>
+		void VVector<T>::resize(size_t size, T value /* = 0 */)
+		{
+			/*	if (size)
+				{
+				}*/
+		}
 
-        template<class T>
-        VVectorIterator VVectorIterator<T>::end()
-        {
-            VVectorIterator<T> iter(m_pArray + sDataSize);
-            return iter;
-        }
+
+		template<class T>
+		T& VVector<T>::getAt(size_t i)
+		{
+			return m_pArray[i];
+		}
+
+		template<class T>
+		size_t VVector<T>::getSize()
+		{
+			return m_sDataSize;
+		}
+
+		template<class T>
+		size_t VVector<T>::getCapacity()
+		{
+			return m_sFullSize;
+		}
+
+		template<class T>
+		VVector::~VVector()
+		{
+			clear();
+			delete m_pArray;
+		}
+
+		template<class T>
+		VVectorIterator VVectorIterator<T>::begin()
+		{
+			VVectorIterator<T> iter(m_pArray);
+			return iter;
+		}
+
+
+		template<class T>
+		VVectorIterator VVectorIterator<T>::end()
+		{
+			VVectorIterator<T> iter(m_pArray + sDataSize);
+			return iter;
+		}
+
+		
+	}
 }

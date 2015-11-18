@@ -11,18 +11,18 @@ namespace Venus
 		VMap<T,V>::VMap()
 		{
 			m_pRandom = new BaseRandom();
-			mHead = mEnd = new element();
+			mHead = mEnd = new VMap<T, V>::element();
 			mEnd->pPrev = 0;
 			uSize = 0;
 		}
 	
 		template<class T, class V>
-		void VMap<T,V>::_adjust(element* node)
+		void VMap<T, V>::_adjust(VMap<T, V>::element* node)
 		{
 			if (node->pLeft->mKey > node->mKey)
 			{
-				element *adjustnode = node->pLeft;
-				element *breaknode = node->pLeft->pRight;
+				VMap<T, V>::element *adjustnode = node->pLeft;
+				VMap<T, V>::element *breaknode = node->pLeft->pRight;
 				adjustnode->pRight = node;
 				adjustnode->pPrev = node->pPrev;
 				node->pPrev = adjustnode;
@@ -31,8 +31,8 @@ namespace Venus
 
 			else if (node->pRight->mKey < node->mKey)
 			{
-				element *adjustnode = node->pRight;
-				element *breaknode = node->pright->pLeft;
+				VMap<T, V>::element *adjustnode = node->pRight;
+				VMap<T, V>::element *breaknode = node->pright->pLeft;
 				adjustnode->pLeft = node;
 				adjustnode->pPrev = node->pPrev;
 				node->pPrev = adjustnode;
@@ -41,14 +41,14 @@ namespace Venus
 		}
 
 		template<class T, class V>
-		VMapIterator<element<T,V>> VMap<T,V>::insert(Pair &p)
+		VMapIterator<VMap<T, V>::element> VMap<T, V>::insert(Pair &p)
 		{
-			element *newNode = new element(key, value);
+			VMap<T, V>::element *newNode = new VMap<T, V>::element(key, value);
 			newNode->pLeft = 0;
 			newNode->pRight = 0;
 			newNode->pprev = 0;
 			newNode->priority = getPriority();
-			element* res = _insert(newNode, mHead);
+			VMap<T, V>::element* res = _insert(newNode, mHead);
 			return VMapIterator<res>;
 		}
 
@@ -82,8 +82,8 @@ namespace Venus
 		template<class T, class V>
 		V& VMap<T,V>::get(T key)
 		{
-			element* node(key, T());
-			VMapIterator<element> res = _insert(mHead, node);
+			VMap<T, V>::element* node(key, T());
+			VMapIterator<VMap<T, V>::element> res = _insert(mHead, node);
 			return res->mValue;
 		}
 
@@ -99,7 +99,7 @@ namespace Venus
 			_clear(mHead);
 		}
 		template<class T, class V>
-		void VMap<T,V>::_clear(element* node)
+		void VMap<T, V>::_clear(VMap<T, V>::element* node)
 		{
 			if (node)
 			{
@@ -108,7 +108,7 @@ namespace Venus
 				delete node;
 			}
 		}
-
+		
 		template<class T, class V>
 		VMap<T,V>::~VMap()
 		{
@@ -117,10 +117,10 @@ namespace Venus
 		}
 
 		template<class T, class V>
-		element<T,V>* VMap<T,V>::_insert(element<T,V> *Node, element<T,V> *root)
+		VMap<T, V>::element* VMap<T, V>::_insert(VMap<T, V>::element *Node, VMap<T, V>::element *root)
 		{
 
-			element<T,V> *res = 0;
+			VMap<T, V>::element *res = 0;
 			if (root == 0)
 			{
 				res = Node;
@@ -164,35 +164,37 @@ namespace Venus
 
 		}
 
+		template<class T, class V>
+		VMap<T, V>::element* VMap<T, V>::_search(VMap<T, V>::element* node, T key)
+		{
+			if (node)
+			{
+				if (node->mKey == key)
+				{
+					return node;
+				}
+
+				else if (node->mKey < key)
+				{
+					return _search(node->pRight, key);
+				}
+				else
+				{
+					return _search(node->pLeft, key);
+				}
+			}
+
+			else
+				return mEnd;
+		}
+
     }
 
 }
 
 
 
-template<class T, class V>
-element<T, V>* VMap<T, V>::_search(element* node, T key)
-{
-	if (node)
-	{
-		if (node->mKey == key)
-		{
-			return node;
-		}
 
-		else if (node->mKey < key)
-		{
-			return search(node->pRight, key);
-		}
-		else
-		{
-			return search(node->pLeft, key);
-		}
-	}
-
-	else
-		return mEnd;
-}
 
 
 

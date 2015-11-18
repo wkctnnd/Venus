@@ -38,15 +38,18 @@ namespace Venus
             public:
                 typedef VVectorIterator Iterator;
 
-                VMap();
+				VVector();
                 VVector(size_t size);
-
+				~VVector();
                 void push_back(T &element);
+				void push_back(T &&element);
                 void clear();
                 void resize(size_t size, T value = 0);
                 T& getAt(size_t i);
                 VVectorIterator begin();
                 VVectorIterator end();
+				size_t getSize();
+				size_t getCapacity();
         private:
 
             T* m_pArray;

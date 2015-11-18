@@ -1,25 +1,34 @@
 #ifndef STRINGTEST_H
 #define STRINGTEST_H
-#include "Container/string.h"
+#include "Container/vector.h"
 #include "../BaseTest.h"
 namespace Venus
 {
 	namespace Test
 	{
-		class StringTest:public BaseTest
+
+		struct test
+		{
+			test(){}
+			f32 param0;
+			bool param1;
+		};
+		class VectorTest:public BaseTest
 		{
 		public:
-			StringTest();
-			~StringTest();
+			VectorTest();
+			~VectorTest();
 		private:
-			bool Compare(TestInfo& info);
-			bool GetChar(TestInfo& info);
-			bool GetLength(TestInfo& info);
-
+			bool CreateVector(TestInfo& info);
+			bool AddElement(TestInfo& info);
+			bool DeleteVector(TestInfo& info);
+			bool ClearVector(TestInfo& info);
+			bool RemoveElement(TestInfo& info);
 		private:
-			Utility::VString *m_sTestString1;
-			Utility::VString *m_sTestString2;
-			Utility::VString *m_sTestString3;
+			
+			Utility::VVector<int32> *m_pIntVector;
+			Utility::VVector<test> *m_pTestVector;
+			Utility::VVector<test*> *m_pTestPointerVector;
 		};
 	}
 }

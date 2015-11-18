@@ -79,10 +79,12 @@ namespace Venus
 
 		private:
 			void _adjust(element* node);
-			element* _insert(element *Node, element *root);
+			
 			int32 _getPriority();
 			element* _search(element* node, T key);
 			void _clear(element *node);
+			element* _insert(element *Node, element *root);
+
 			BaseRandom* m_pRandom;
 		};
 

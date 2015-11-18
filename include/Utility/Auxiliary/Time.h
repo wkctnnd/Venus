@@ -1,7 +1,7 @@
 #ifndef TIME_H
 #define  TIME_H
 #include "type.h"
-
+#include <time.h>
 namespace Venus
 {
 	namespace Utility
