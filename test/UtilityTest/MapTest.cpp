@@ -16,11 +16,11 @@ namespace Venus
 		bool MapTest::CreateMap(TestInfo& info)
 		{
 			TEST_INIT(info, "createvector");
-			m_pStringMap = new Utility::VMap < Utility::Pair < uint32, std::string >> ();
-			m_pTestMap = new Utility::VMap<>
-			m_pTestPointerMap = new Utility::VMap<test*>();
+			m_pStringMap = new Utility::VMap <int32, std::string> ();
+			m_pTestMap = new Utility::VMap<std::string, test>();
+			m_pTestPointerMap = new Utility::VMap<f32, test*>();
 
-			if (m_pIntVector&&m_pTestVector&&m_pTestPointerVector)
+			if (m_pStringMap&&m_pTestMap&&m_pTestPointerMap)
 				return true;
 			else return false;
 
@@ -31,7 +31,7 @@ namespace Venus
 			TEST_INIT(info, "add elements");
 			try
 			{
-				int a = 3;
+			/*	int a = 3;
 				m_pIntVector->push_back(1);
 				m_pIntVector->push_back(a);
 				for (int32 i = 2; i < 10; i++)
@@ -51,7 +51,7 @@ namespace Venus
 				{
 					test* t = new test();
 					(*m_pTestPointerVector)[i] = t;
-				}
+				}*/
 			}
 			catch (...)
 			{
@@ -64,7 +64,7 @@ namespace Venus
 		bool MapTest::GetSize(TestInfo& info)
 		{
 			TEST_INIT(info, "get vector size and capacity");
-			if (m_pIntVector->getSize() == 10 && m_pIntVector->getCapacity() == 16)
+		/*	if (m_pIntVector->getSize() == 10 && m_pIntVector->getCapacity() == 16)
 			{
 				if (m_pTestVector->getSize() == 20 && m_pTestVector->getCapacity() == 20)
 				{
@@ -73,14 +73,14 @@ namespace Venus
 						return true;
 					}
 				}
-			}
+			}*/
 			return false;
 		}
 
 		bool MapTest::DeleteMap(TestInfo& info)
 		{
 			TEST_INIT(info, "delete vector");
-			try
+		/*	try
 			{
 				delete m_pIntVector;
 				delete m_pTestVector;
@@ -89,7 +89,7 @@ namespace Venus
 			catch (...)
 			{
 				return false;
-			}
+			}*/
 
 			return true;
 
@@ -99,9 +99,9 @@ namespace Venus
 		{
 			TEST_INIT(info, "Clear Vector");
 
-			m_pIntVector->clear();
+		/*	m_pIntVector->clear();
 			m_pTestVector->clear();
-			m_pTestPointerVector->clear();
+			m_pTestPointerVector->clear();*/
 
 
 		}
