@@ -6,9 +6,11 @@ namespace Venus
 		VectorTest::VectorTest()
 		{
 			TESTFUN_INIT(VectorTest::CreateVector);
-			TESTFUN_INIT(VectorTest::DeleteVector);
-			TESTFUN_INIT(VectorTest::ClearVector);
+			TESTFUN_INIT(VectorTest::AddElement);
+			TESTFUN_INIT(VectorTest::GetSizeAndCapacity);
 			TESTFUN_INIT(VectorTest::RemoveElement);
+			TESTFUN_INIT(VectorTest::ClearVector);
+			TESTFUN_INIT(VectorTest::DeleteVector);		
 		}
 
 		bool VectorTest::CreateVector(TestInfo& info)
@@ -78,27 +80,38 @@ namespace Venus
 		bool VectorTest::DeleteVector(TestInfo& info)
 		{
 			TEST_INIT(info, "delete vector");
-			delete m_pIntVector;
-			delete m_pTestVector;
-			delete m_pTestPointerVector;
+			try
+			{
+				delete m_pIntVector;
+				delete m_pTestVector;
+				delete m_pTestPointerVector;
+			}
+			catch (...)
+			{
+				return false;
+			}
+
+			return true;
 		
 		}
 
 		bool VectorTest::ClearVector(TestInfo& info)
 		{
-			TEST_INIT(info, "get char");
+			TEST_INIT(info, "Clear Vector");
 
-			
+			m_pIntVector->clear();
+			m_pTestVector->clear();
+			m_pTestPointerVector->clear();
 			
 
 		}
 
 		bool VectorTest::RemoveElement(TestInfo& info)
 		{
-			TEST_INIT(info, "get char");
+			TEST_INIT(info, "Remove Element");
 
 			
-
+			return true;
 
 		}
 	}

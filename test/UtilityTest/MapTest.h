@@ -1,27 +1,38 @@
-#ifndef STRINGTEST_H
-#define STRINGTEST_H
+#ifndef MAPTEST_H
+#define MAPTEST_H
 #include "Container/map.h"
 #include "../BaseTest.h"
 namespace Venus
 {
 	namespace Test
 	{
-		class MapTest:public BaseTest
+
+		struct test
+		{
+			test(){ param0 = 1; param1 = 2; }
+			f32 param0;
+			bool param1;
+		};
+
+		class MapTest :public BaseTest
 		{
 		public:
-			StringTest();
-			~StringTest();
+			MapTest();
+			~MapTest();
 		private:
-			bool Compare(TestInfo& info);
-			bool GetChar(TestInfo& info);
-			bool GetLength(TestInfo& info);
+			bool CreateMap(TestInfo& info);
+			bool AddElement(TestInfo& info);
+			bool GetSize(TestInfo& info);
+			bool DeleteMap(TestInfo& info);
+			bool ClearMap(TestInfo& info);
+			bool RemoveElement(TestInfo& info);
+		private:
 
-		private:
-			Utility::VString *m_sTestString1;
-			Utility::VString *m_sTestString2;
-			Utility::VString *m_sTestString3;
+			Utility::VMap<int32, std::string> *m_pStringMap;
+			Utility::VMap<std::string, test> *m_pTestMap;
+			Utility::VMap<f32, test*> *m_pTestPointerMap;
 		};
 	}
 }
 
-#endif // STRINGTEST_H
+#endif // MAPTEST_H

@@ -1,5 +1,5 @@
-#ifndef STRINGTEST_H
-#define STRINGTEST_H
+#ifndef VECTORTEST_H
+#define VECTORTEST_H
 #include "Container/vector.h"
 #include "../BaseTest.h"
 namespace Venus
@@ -34,4 +34,4 @@ namespace Venus
 	}
 }
 
-#endif // STRINGTEST_H
+#endif // VECTORTEST_H

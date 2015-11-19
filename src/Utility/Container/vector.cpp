@@ -176,7 +176,7 @@ namespace Venus
 		{
 			return m_sFullSize;
 		}
-		std::vector.clear()
+
 		template<class T>
 		VVector::~VVector()
 		{
