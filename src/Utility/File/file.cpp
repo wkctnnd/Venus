@@ -30,7 +30,7 @@ namespace Venus
 
 		size_t VFile::getFileSize()
 		{
-			return implementation->
+			return implementation->getFileSize();
 		}
 
 		size_t VFile::synRead(void* p, uint32 size)

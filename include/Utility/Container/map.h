@@ -8,18 +8,9 @@ namespace Venus
     {
 		class BaseRandom;
         template<class T>
-        class VMapIterator :public Bidirection_Iterator
+        class VMapIterator :public Bidirection_Iterator<T>
         {
-            friend VVectorIterator;
-        public:
-            VVectorIterator(T *p);
-            VVectorIterator(VVectorIterator &v);
-
-            virtual T* operator ->();
-            virtual Random_Iterator& operator ++();
-            virtual Random_Iterator& operator --();
-            virtual bool operator !=(Random_Iterator& i);
-            virtual bool operator ==(Random_Iterator& i);
+           
 
 
         private:

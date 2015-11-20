@@ -26,19 +26,19 @@ namespace Venus
 
 
 			template<class T, class... param >
-			virtual T* allocateNew(param... t);
+			T* allocateNew(param... t);
 
             template<class T>
-			virtual T* allocateNew(T&);
+			T* allocateNew(T&);
 
             template<class T>
-			virtual void dellocateDelete(void* p);
+			void dellocateDelete(void* p);
 
             template<class T>
-			virtual T** allocateNewArray(size_t num);
+			T* allocateNewArray(size_t num);
 
             template<class T>
-			virtual void dellocateDeleteArray(void* p);
+			void dellocateDeleteArray(void* p);
 
 		protected:
 			virtual void *allocate(size_t size, uint8 alignment) = 0;
@@ -52,19 +52,19 @@ namespace Venus
 		{
 		public:
 			template<class T, class ... param>
-			virtual T* allocateNew(param... t);
+			T* allocateNew(param... t);
 
 			template<class T>
-			virtual T* allocateNew(T&);
+			T* allocateNew(T&);
 
 			template<class T>
-			virtual void dellocateDelete(void* p);
+			void dellocateDelete(void* p);
 
 			template<class T>
-			virtual T** allocateNewArray(size_t num);
+			T* allocateNewArray(size_t num);
 
 			template<class T>
-			virtual void dellocateDeleteArray(void** p);
+			void dellocateDeleteArray(void* p);
 
 		protected:
 			void *allocate(size_t size, uint8 alignment){}
@@ -77,61 +77,61 @@ namespace Venus
 
 
 		//for single frame temp value
-		class LinearAllocator :public Allocator, public SingleTon<LinearAllocator>
-		{
-		private:
-			
-		};
+	//	class LinearAllocator :public Allocator, public SingleTon<LinearAllocator>
+	//	{
+	//	private:
+	//		
+	//	};
 
 
 
 
 
 
-		class StackAllocator :public Allocator, public SingleTon<StackAllocator>
-        {
-        public:
-            struct Header
-            {
-                size_t sPrePosition;
-                size_t sLength;
-            };
-            StackAllocator(size_t size);
-            void *allocate(size_t size, uint8 alignment);
-            void dellocate(void* p);
-        private:
-            size_t sCurPosition;
-            size_t sLength;
-		private:
-			/*StackAllocator(){}*/
-			//static StackAllocator * m_pAllocator;
-        };
+	//	class StackAllocator :public Allocator, public SingleTon<StackAllocator>
+ //       {
+ //       public:
+ //           struct Header
+ //           {
+ //               size_t sPrePosition;
+ //               size_t sLength;
+ //           };
+ //           StackAllocator(size_t size);
+ //           void *allocate(size_t size, uint8 alignment);
+ //           void dellocate(void* p);
+ //       private:
+ //           size_t sCurPosition;
+ //           size_t sLength;
+	//	private:
+	//		/*StackAllocator(){}*/
+	//		//static StackAllocator * m_pAllocator;
+ //       };
 
 
-		class DynamicPoolAllocator :public Allocator, public SingleTon<DynamicPoolAllocator>
-		{
-		private:
-			struct freeblock
-			{
-				freeblock* mNext;
-				uint32 msize;
-			};
+	//	class DynamicPoolAllocator :public Allocator, public SingleTon<DynamicPoolAllocator>
+	//	{
+	//	private:
+	//		struct freeblock
+	//		{
+	//			freeblock* mNext;
+	//			uint32 msize;
+	//		};
 
-			void *mFreeList;
-		
-		public:
-			DynamicPoolAllocator(size_t size = 8);
+	//		void *mFreeList;
+	//	
+	//	public:
+	//		DynamicPoolAllocator(size_t size = 8);
 
-			void* allocate(uint32 size , uint8 allignment);
+	//		void* allocate(uint32 size , uint8 allignment);
 
-			void defragment();
+	//		void defragment();
 
-			void dellocate(void* p);
-	
-	/*	private:
-			DynamicPoolAllocator(){}*/
+	//		void dellocate(void* p);
+	//
+	///*	private:
+	//		DynamicPoolAllocator(){}*/
 
-		};
+	//	};
 
 		
 
@@ -139,18 +139,20 @@ namespace Venus
 
 		//block size is byte unit
         //best for list not support for random access
-		template <int blocksize>
-		class FixBlockAllocator :public Allocator, public SingleTon<FixBlockAllocator>
-		{ 
-			void *header;
-			unsigned int blockcount;
+		//template <int blocksize>
+		//class FixBlockAllocator /*:public Allocator, public SingleTon<FixBlockAllocator>*/
+		//{ 
+		//	void *header;
+		//	unsigned int blockcount;
 
 
-		};
+		//};
 
 
-
+		template<class T>
 		void* Venus_new( uint32 size, Allocator *allocator = 0, uint8 alignment = ALIGN4);
+		
+		template<class T>
 		void Venus_delete(void *pointer);
 		
 	}
