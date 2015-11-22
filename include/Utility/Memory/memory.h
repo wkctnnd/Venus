@@ -51,6 +51,7 @@ namespace Venus
 		class SimpleAllocator:public Allocator, public SingleTon<SimpleAllocator>
 		{
 		public:
+			SimpleAllocator(){};
 			template<class T, class ... param>
 			T* allocateNew(param... t);
 
@@ -67,10 +68,9 @@ namespace Venus
 			void dellocateDeleteArray(void* p);
 
 		protected:
-			void *allocate(size_t size, uint8 alignment){}
+			void *allocate(size_t size, uint8 alignment){ return 0; }
 			void dellocate(void* p){}
-		private:
-			SimpleAllocator(){};
+			
 		};
 		
 

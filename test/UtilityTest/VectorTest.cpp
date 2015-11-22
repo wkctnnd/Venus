@@ -103,7 +103,7 @@ namespace Venus
 			m_pTestVector->clear();
 			m_pTestPointerVector->clear();
 			
-
+			return true;
 		}
 
 		bool VectorTest::RemoveElement(TestInfo& info)

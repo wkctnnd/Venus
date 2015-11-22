@@ -1,3 +1,5 @@
+#ifndef WINFILE_H
+#define WINFILE_H
 #include "File/file.h"
 #include <windows.h>
 #include "utilenum.h"
@@ -24,3 +26,5 @@ namespace Venus
 		};
     }
 }
+
+#endif

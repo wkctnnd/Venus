@@ -8,6 +8,7 @@ namespace Venus
 		int64 Clock::getTickTime()
 		{
 			int64 tick = _time64(NULL);
+			return tick;
 		}
 
 		CalenderTime Clock::getUTCTime()

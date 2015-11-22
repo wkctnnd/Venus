@@ -1,6 +1,6 @@
 #include "crossplatform.h"
 #include "File/file.h"
-#include <assert.h>
+#include "assert.h"
 
 #if (defined VENUS_WIN32) || (defined VENUS_WIN64)
 #include "Win/winfile.h"
@@ -39,7 +39,7 @@ namespace Venus
         }
 		bool VFile::close()
 		{
-			implementation->close();
+			return implementation->close();
 		}
 
         void VFile::seekPosition(int64 offset, StartPosition pos)

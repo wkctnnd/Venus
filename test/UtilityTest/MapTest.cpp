@@ -102,7 +102,7 @@ namespace Venus
 		/*	m_pIntVector->clear();
 			m_pTestVector->clear();
 			m_pTestPointerVector->clear();*/
-
+			return true;
 
 		}
 

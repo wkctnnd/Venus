@@ -23,7 +23,7 @@ namespace Venus
 		}
 
 		template<class T>
-		T* Allocator::allcateNewArray(size_t num)
+		T* Allocator::allocateNewArray(size_t num)
 		{
 			size_t head = sizeof(size_t) / sizeof(T) + 1;
 			void* p = allocate((sizeof(T) + head) * num, _ALIGN_OF(T));

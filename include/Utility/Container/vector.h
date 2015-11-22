@@ -7,9 +7,9 @@ namespace Venus
     namespace Utility
     {
         template<class T>
-        class VVectorIterator :public Random_Iterator
+        class VVectorIterator :public Random_Iterator<T>
         {
-            friend VVectorIterator;
+            friend VVectorIterator<T>;
         public:
             VVectorIterator(T *p);
             VVectorIterator(VVectorIterator &v);
@@ -36,7 +36,7 @@ namespace Venus
         class VVector
         {
             public:
-                typedef VVectorIterator Iterator;
+                typedef VVectorIterator<T> Iterator;
 
 				VVector();
                 VVector(size_t size);
@@ -47,8 +47,8 @@ namespace Venus
                 void resize(size_t size, T *value = 0);
 				void reserve(size_t size);
                 T& getAt(size_t i);
-                VVectorIterator begin();
-                VVectorIterator end();
+				Iterator begin();
+				Iterator end();
 				size_t getSize();
 				size_t getCapacity();
 				T& operator [] (size_t i);

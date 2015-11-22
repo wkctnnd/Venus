@@ -7,19 +7,8 @@ namespace Venus
     namespace Utility
     {
 		class BaseRandom;
-        template<class T>
-        class VMapIterator :public Bidirection_Iterator<T>
-        {
-           
-
-
-        private:
-            T* mPointer;
-            // size_t sIndex;
-        };
-
-
-         template<class T, class V>
+     
+		template<typename T, typename V>
          class Pair
          {
          public:
@@ -28,53 +17,67 @@ namespace Venus
             T mFirst;
             V mSecond;
          };
+
+		 template<class T,class V>
+		 struct  element
+		 {
+			 element(T key, V value) :mKey(key), mValue(value), vLeft(0), vRight(0){}
+			 element(){}
+			 T mKey;
+			 V mValue;
+			 int priority;
+
+			 element *pLeft;
+			 element *pRight;
+			 element *pPrev;
+		 };
+
+		 template<class T,class V>
+		 class VMapIterator :public Bidirection_Iterator<T>
+		 {
+			 VMapIterator(element<T, V>*);
+
+
+		 private:
+			 element<T,V>* mPointer;
+			 // size_t sIndex;
+		 };
      
-        template<class T, class V>
+		 template<typename T, typename V>
         class VMap
         {
         public:
-
-			struct  element
-            {
-                element(key, value):mKey(key),mValue(value),vLeft(0),vRight(0){}
-                element(){}
-                T mKey;
-                V mValue;
-                int priority;
-
-				element *pLeft;
-				element *pRight;
-				element *pPrev;
-            };
-            typedef VMapIterator Iterator;
+		
+			
+            typedef VMapIterator<T,V> Iterator;
 
             VMap();
             VMap(size_t size);
 			~VMap();
-            VMapIterator<element> insert(Pair &p);
-            void delete(T t);
+			Iterator insert(Pair<T, V> &p);
+            void remove(T t);
             void clear();
 
             V& get(T key);
-            VMapIterator begin();
-           VMapIterator end();
+			Iterator begin();
+			Iterator end();
            bool isEmpty();
 		 
 
             V& operator [](T t);
         private:
             
-            element* mHead;
-            element* mEnd;
+            element<T,V>* mHead;
+			element<T, V>* mEnd;
             unsigned int uSize;
 
 		private:
-			void _adjust(element* node);
+			void _adjust(element<T, V>* node);
 			
 			int32 _getPriority();
-			element* _search(element* node, T key);
-			void _clear(element *node);
-			element* _insert(element *Node, element *root);
+			element<T, V>* _search(element<T, V>* node, T key);
+			void _clear(element<T,V> *node);
+			element<T, V>* _insert(element<T, V> *Node, element<T, V> *root);
 
 			BaseRandom* m_pRandom;
 		};

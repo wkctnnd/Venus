@@ -19,14 +19,14 @@ namespace Venus
 			return m_pArray;
 		}
 		template<class T>
-		Random_Iterator& VVectorIterator<T>::operator ++()
+		Random_Iterator<T>& VVectorIterator<T>::operator ++()
 		{
 			m_pArray++;
 			return *this;
 		}
 
 		template<class T>
-		Random_Iterator& VVectorIterator<T>::operator --()
+		Random_Iterator<T>& VVectorIterator<T>::operator --()
 		{
 			m_pArray--;
 			return *this;
@@ -65,7 +65,7 @@ namespace Venus
 
 		}
 		template<class T>
-		Random_Iterator VVectorIterator<T>::operator + (size_t i)
+		Random_Iterator<T> VVectorIterator<T>::operator + (size_t i)
 		{
 			VVectorIterator temp(*this);
 			temp.m_pArray += i;
@@ -73,7 +73,7 @@ namespace Venus
 		}
 
 		template<class T>
-		Random_Iterator operator - (size_t i)
+		Random_Iterator<T> VVectorIterator<T>::operator - (size_t i)
 		{
 			VVectorIterator temp(*this);
 			temp.m_pArray -= i;
@@ -178,20 +178,20 @@ namespace Venus
 		}
 
 		template<class T>
-		VVector::~VVector()
+		VVector<T>::~VVector()
 		{
 			clear();
 			delete m_pArray;
 		}
 
 		template<class T>
-		T& VVector<T>::operator =(size_t i)
+		T& VVector<T>::operator [](size_t i)
 		{
 			return getAt(i);
 		}
 
 		template<class T>
-		VVectorIterator VVectorIterator<T>::begin()
+		VVectorIterator<T> VVector<T>::begin()
 		{
 			VVectorIterator<T> iter(m_pArray);
 			return iter;
@@ -199,7 +199,7 @@ namespace Venus
 
 
 		template<class T>
-		VVectorIterator VVectorIterator<T>::end()
+		VVectorIterator<T> VVector<T>::end()
 		{
 			VVectorIterator<T> iter(m_pArray + sDataSize);
 			return iter;

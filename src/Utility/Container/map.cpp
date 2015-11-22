@@ -16,8 +16,8 @@ namespace Venus
 			uSize = 0;
 		}
 	
-		template<class T, class V>
-		void VMap<T, V>::_adjust(VMap<T, V>::element* node)
+		template<typename T, typename V>
+		void VMap<T, V>::_adjust(element<T, V>* node)
 		{
 			if (node->pLeft->mKey > node->mKey)
 			{
@@ -40,27 +40,27 @@ namespace Venus
 			}
 		}
 
-		template<class T, class V>
-		VMapIterator<VMap<T, V>::element> VMap<T, V>::insert(Pair &p)
+		template<typename T, typename V>
+		VMapIterator<T,V> VMap<T, V>::insert(Pair<T,V> &p)
 		{
-			VMap<T, V>::element *newNode = new VMap<T, V>::element(key, value);
+			element<T,V> *newNode = new element<T,V>(key, value);
 			newNode->pLeft = 0;
 			newNode->pRight = 0;
 			newNode->pprev = 0;
 			newNode->priority = getPriority();
-			VMap<T, V>::element* res = _insert(newNode, mHead);
-			return VMapIterator<res>;
+			element<T,V>* res = _insert(newNode, mHead);
+			return VMapIterator<T,V>(res);
 		}
 
 		template<class T, class V>
-		VMapIterator<T, V> VMap<T,V>::begin()
+		VMapIterator<T,V> VMap<T, V>::begin()
 		{
 			VMapIterator<T, V> iterator(vHead);
 			return iterator;
 		}
 
 		template<class T, class V>
-		VMapIterator<T, V> VMap<T,V>::end()
+		VMapIterator<T, V> VMap<T, V>::end()
 		{
 			VMapIterator<T, V> iterator(vEnd);
 			return iterator;
@@ -99,7 +99,7 @@ namespace Venus
 			_clear(mHead);
 		}
 		template<class T, class V>
-		void VMap<T, V>::_clear(VMap<T, V>::element* node)
+		void VMap<T, V>::_clear(element<T,V>* node)
 		{
 			if (node)
 			{
@@ -112,15 +112,15 @@ namespace Venus
 		template<class T, class V>
 		VMap<T,V>::~VMap()
 		{
-			_clear();
+			_clear(mHead);
 			delete m_pRandom;
 		}
 
 		template<class T, class V>
-		VMap<T, V>::element* VMap<T, V>::_insert(VMap<T, V>::element *Node, VMap<T, V>::element *root)
+		element<T, V>* VMap<T, V>::_insert(element<T, V> *Node, element<T, V> *root)
 		{
 
-			VMap<T, V>::element *res = 0;
+			element<T, V> *res = 0;
 			if (root == 0)
 			{
 				res = Node;
@@ -165,7 +165,7 @@ namespace Venus
 		}
 
 		template<class T, class V>
-		VMap<T, V>::element* VMap<T, V>::_search(VMap<T, V>::element* node, T key)
+		element<T, V>* VMap<T, V>::_search(element<T, V>* node, T key)
 		{
 			if (node)
 			{

@@ -16,7 +16,8 @@ Set(VenusBuild ${CMAKE_CURRENT_SOURCE_DIR}/build)
 #set binary directory
 set(VenusBinary ${VenusBuild}/binary)
 
-
+#set link path
+LINK_DIRECTORIES( ${VenusBuild}/binary/bin/debug)
 
 #set exe liboutput dir
 SET(EXECUTABLE_OUTPUT_PATH ${VenusBinary}/bin)
