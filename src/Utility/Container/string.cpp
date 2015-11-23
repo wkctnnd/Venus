@@ -17,6 +17,14 @@ namespace Venus
              cStr = 0;
         }
 
+		VString::~VString()
+		{
+			if (!cStr)
+			{
+				delete cStr;
+			}
+		}
+
         VString::VString(VString &s)
         {
             size_t length = s.length();

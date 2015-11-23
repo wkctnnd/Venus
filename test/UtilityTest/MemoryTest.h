@@ -16,6 +16,7 @@ namespace Venus
 				m_sC = c;
 			}
 			testA(){}
+			~testA(){}
 			int m_iA;
 			double m_dB;
 			std::string m_sC;

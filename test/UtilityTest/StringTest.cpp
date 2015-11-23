@@ -14,6 +14,10 @@ namespace Venus
 			m_sTestString3->assign("WANGKC");
 		}
 
+		StringTest::~StringTest()
+		{
+		}
+
 		bool StringTest::Compare(TestInfo& info)
 		{
 			TEST_INIT(info, "compare");

@@ -1,13 +1,13 @@
-#include "Container\map.h"
-#include "Auxiliary\random.h"
-#include "Auxiliary\Time.h"
+//#include "Container\map.h"
+//#include "Auxiliary\random.h"
+//#include "Auxiliary\Time.h"
 namespace Venus
 {
     namespace Utility
     {
 
 
-		template<class T, class V>
+	/*	template<class T, class V>
 		VMap<T,V>::VMap()
 		{
 			m_pRandom = new BaseRandom();
@@ -186,7 +186,7 @@ namespace Venus
 
 			else
 				return mEnd;
-		}
+		}*/
 
     }
 

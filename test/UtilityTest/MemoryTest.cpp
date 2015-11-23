@@ -19,7 +19,7 @@ namespace Venus
 			Utility::Allocator *allocator = Utility::SimpleAllocator::getInstance();	
 			try
 			{
-				m_pInt = allocator->allocateNew<int>();
+				/*m_pInt = allocator->allocateNew<int>();
 				if (!m_pInt)  res = false;
 				m_pString = allocator->allocateNew<std::string>();
 				if (!m_pString)  res = false;
@@ -30,7 +30,7 @@ namespace Venus
 				m_pTestArray = allocator->allocateNewArray<testA>(10);
 				if (!m_pTestArray)  res = false;
 				m_pStringArray = allocator->allocateNewArray<std::string>(10);
-				if (!m_pStringArray)  res = false;
+				if (!m_pStringArray)  res = false;*/
 			}
 			catch (...)
 			{
